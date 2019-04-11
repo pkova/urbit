@@ -687,24 +687,47 @@
       ap-abet:pouted
     ==
   ::
-  ++  mo-claw                                           ::  clear queue
-    |=  dap/dude
-    ^+  +>
-    ?.  (~(has by bum.mas) dap)  +>
-    =+  suf=(~(get by wub.mas) dap)
-    ?~  suf  +>.$
-    |-  ^+  +>.^$
-    ?:  =(~ kys.u.suf)
-      +>.^$(wub.mas (~(del by wub.mas) dap))
-    =^  lep  kys.u.suf  [p q]:~(get to kys.u.suf)
-    $(moz :_(moz [p.lep %slip %g %deal [q.q.q.lep our] dap r.lep]))
-    ::  $(+>.^$ (mo-clip(hen p.lep) dap q.lep r.lep))
+  ::  +mo-claw: clear queue.
   ::
-  ++  mo-beak                                           ::  build beak
-    |=  dap/dude
-    =-  ?.(=(p our) - -(r [%da now])) ::  soft dependencies
+  ++  mo-claw
+    |=  =dude
+    ^+  mo-state
+    ::
+    ?.  (~(has by bum.mas) dude)
+      mo-state
+    ::
+    =/  suf  (~(get by wub.mas) dude)
+    ?~  suf
+      mo-state
+    ::
+    |-
+    ^+  mo-state
+    ::
+    ?:  =(~ kys.u.suf)
+      %_  mo-state
+        wub.mas  (~(del by wub.mas) dude)
+      ==
+    ::
+    =^  lep  kys.u.suf  [p q]:~(get to kys.u.suf)
+    ::
+    =/  move  [p.lep %slip %g %deal [q.q.q.lep our] dude r.lep]
+    $(moves [move moves])
+  ::
+  ::  +mo-beak: build beak.
+  ::
+  ++  mo-beak
+    |=  =dude
     ^-  beak
-    byk:(~(got by bum.mas) dap)
+    ::
+    =/  =beak
+      =/  mast  (~(got by bum.mas) dude)
+      byk:mast
+    ::
+    ?.  =(p.beak our)
+      beak
+    beak(r [%da now])
+  ::
+  ::  +mo-peek: scry.
   ::
   ++  mo-peek
     ~/  %mo-peek
