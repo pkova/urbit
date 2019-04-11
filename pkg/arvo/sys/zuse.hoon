@@ -1731,7 +1731,7 @@
       ==                                                ::
     ++  task                                            ::  incoming request
       $~  [%vega ~]                                     ::
-      $%  {$conf p/dock q/culm}                         ::  configure app
+      $%  {$conf p/dock q/(pair ship desk)}             ::  configure app
           $>(%init vane-task)                           ::  set owner
           {$deal p/sock q/cush}                         ::  full transmission
           $>(%sunk vane-task)                           ::  report death
@@ -1775,12 +1775,6 @@
         {$reap p/(unit tang)}                           ::  peer result
         [%http-response =http-event:http]              ::  serve http result
     ==                                                  ::
-  ++  culm                                              ::  config action
-    $%  {$load p/scup}                                  ::  load+reload
-    ::  {$kick ~}                                      ::  restart everything
-    ::  {$stop ~}                                      ::  toggle suspend
-    ::  {$wipe ~}                                      ::  destroy all state
-    ==                                                  ::
   ++  cush  (pair term club)                            ::  internal task
   ++  dude  term                                        ::  server identity
   ++  gill  (pair ship term)                            ::  general contact
@@ -1789,7 +1783,6 @@
         q/(map duct bone)                               ::  by duct
         r/(map bone duct)                               ::  by bone
     ==                                                  ::
-  ++  scup  (pair ship desk)                            ::  autoupdate
   ++  suss  (trel dude @tas @da)                        ::  config report
   ++  well  (pair desk term)                            ::
   --  ::gall
