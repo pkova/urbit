@@ -1731,7 +1731,7 @@
       ==                                                ::
     ++  task                                            ::  incoming request
       $~  [%vega ~]                                     ::
-      $%  {$conf p/dock q/(pair ship desk)}             ::  configure app
+      $%  {$conf p/dock q/dock}                         ::  configure app
           $>(%init vane-task)                           ::  set owner
           {$deal p/sock q/cush}                         ::  full transmission
           $>(%sunk vane-task)                           ::  report death
