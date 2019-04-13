@@ -200,7 +200,7 @@
   ::
   ++  mo-receive-core
     ~/  %mo-receive-core
-    |=  [dap=dude byk=beak made-result=made-result:ford]
+    |=  [=dude =beak made-result=made-result:ford]
     ^+  mo-state
     ::
     ?:  ?=([%incomplete *] made-result)
@@ -214,30 +214,30 @@
     =/  =cage  (result-to-cage:ford build-result)
     =/  result-vase  q.cage
     ::
-    =/  app-data=(unit seat)  (~(get by bum.mas) dap)
+    =/  app-data=(unit seat)  (~(get by bum.mas) dude)
     ?^  app-data
       ::  update the path
       ::
-      =/  updated  u.app-data(byk byk)
-      =.  bum.mas  (~(put by bum.mas) dap updated)
+      =/  updated  u.app-data(byk beak)
+      =.  bum.mas  (~(put by bum.mas) dude updated)
       ::  magic update string from +mo-boon, "complete old boot"
       ::
-      ap-abet:(ap-peep:(ap-abed:ap dap [%high [~ our]]) result-vase)
+      ap-abet:(ap-peep:(ap-abed:ap dude [%high [~ our]]) result-vase)
     ::  first install of the app
     ::
     ?.  (mo-okay result-vase)
-      (mo-give %onto %.n [%leaf "{<dap>}: bogus core"]~)
+      (mo-give %onto %.n [%leaf "{<dude>}: bogus core"]~)
     ::
-    =.  mo-state  (mo-born dap byk result-vase)
+    =.  mo-state  (mo-born dude beak result-vase)
     ::
     =/  old  mo-state
-    =/  wag  (ap-prop:(ap-abed:ap dap [%high [~ our]]) ~)
+    =/  wag  (ap-prop:(ap-abed:ap dude [%high [~ our]]) ~)
     ::
     ?^  -.wag
       =.  mo-state  old
       (mo-give %onto %.n u.-.wag)
     =.  mo-state  ap-abet:+.wag
-    (mo-give:(mo-claw dap) %onto %.y dap %boot now)
+    (mo-give:(mo-claw dude) %onto %.y dude %boot now)
   ::
   ::  +mo-born: create a new seat.
   ::
