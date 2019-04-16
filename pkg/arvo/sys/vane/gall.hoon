@@ -402,19 +402,6 @@
     =/  =prey  [%high [~ ship]]
     (mo-club p.cush prey q.cush)
   ::
-  ::  +mo-chew: reverse build path.
-  ::
-  ++  mo-chew
-    |=  =path
-    ^-  beak
-    ::
-    ?>  ?=([@ @ @ ~] path)
-    ::
-    =/  ship  (slav %p i.path)
-    =/  desk  i.t.path
-    =/  case  [%da (slav %da i.t.t.path)]
-    [p=ship q=desk r=case]
-  ::
   ::  +mo-cyst-core: receive a core.
   ::
   ++  mo-cyst-core
@@ -424,7 +411,12 @@
     ?>  ?=([%f %made *] sign-arvo)
     ?>  ?=([@ @ @ @ @ ~] path)
     ::
-    =/  =beak  (mo-chew t.t.t.path)
+    =/  beak
+      =/  ship  (slav %p i.t.t.path)
+      =/  desk  i.t.t.t.path
+      =/  case  [%da (slav %da i.t.t.t.t.path)]
+      [p=ship q=desk r=case]
+    ::
     (mo-receive-core i.t.t.path beak result.sign-arvo)
   ::
   ::  +mo-cyst-pel: translated peer.
