@@ -411,7 +411,7 @@
     ?>  ?=([%f %made *] sign-arvo)
     ?>  ?=([@ @ @ @ @ ~] path)
     ::
-    =/  beak
+    =/  =beak
       =/  ship  (slav %p i.t.t.path)
       =/  desk  i.t.t.t.path
       =/  case  [%da (slav %da i.t.t.t.t.path)]
@@ -477,7 +477,7 @@
       ~&  [%diff-bad-ack q.gift]
       mo-state
     ~&  [%diff-bad-ack %mack]
-    =/  slaw  (slog (flop q.,.+>.q.gift))
+    =/  slaw  (slog (flop q.,.+>.q.gift)) :: FIXME overly noisy lark
     (slaw mo-state)
   ::
   ::  +mo-cyst-rep: reverse request.
@@ -765,15 +765,17 @@
     |=  [=dude =prey =club]
     ^+  mo-state
     ::
+    =/  default-sofa  *sofa
+    ::
     ?:  |(!(~(has by bum.mas) dude) (~(has by wub.mas) dude))
       ~&  >>  [%mo-not-running dude -.club]
-      =/  sof=sofa
-        =/  kisses  (fall (~(get by wub.mas) dude) *sofa)
+      =/  =sofa
+        =/  kisses  (fall (~(get by wub.mas) dude) default-sofa)
         =/  kiss  [hen prey club]
         kisses(kys (~(put to kys.kisses) kiss))
       ::
       %_  mo-state
-        wub.mas  (~(put by wub.mas) dude sof)
+        wub.mas  (~(put by wub.mas) dude sofa)
       ==
     ::
     (mo-clip dude prey club)
