@@ -154,27 +154,27 @@
     ^+  mo-state
     ::
     =/  =beak
-      =/  case  [%da now]
+      =/  =case  [%da now]
       [p=ship q=desk r=case]
     ::
     (mo-boot dude beak)
   ::
-  ::  +mo-pass: prepend a standard %pass move.
+  ::  +mo-pass: prepend a standard %pass move to the move state.
   ::
   ++  mo-pass
     |=  pass=(pair path note-arvo)
     ^+  mo-state
     ::
-    =/  move  [hen %pass pass]
+    =/  =move  [hen %pass pass]
     mo-state(moves [move moves])
   ::
-  ::  +mo-give: prepend a standard %give move.
+  ::  +mo-give: prepend a standard %give move to the move state.
   ::
   ++  mo-give
-    |=  gift=gift:able
+    |=  =gift:able
     ^+  mo-state
     ::
-    =/  move  [hen %give gift]
+    =/  =move  [hen %give gift]
     mo-state(moves [move moves])
   ::
   :: +mo-okay: check that a ford-built app core produces a valid bowl.
@@ -184,12 +184,12 @@
     |=  =vase
     ^-  ?
     ::
-    =/  bol  (slew 12 vase)
-    ?~  bol
+    =/  val  (slew 12 vase)
+    ?~  val
       %.n
     ::
-    =/  declared  p.u.bol
-    (~(nest ut declared) %.n bowl-type)
+    =/  bowl  p.u.val
+    (~(nest ut bowl) %.n bowl-type)
   ::
   ::  +mo-receive-core: receives an app core built by ford-turbo.
   ::
