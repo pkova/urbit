@@ -388,15 +388,6 @@
     =/  duct  r:conns
     (~(got by duct) index)
   ::
-  ::  +mo-come: handle locally.
-  ::
-  ++  mo-come
-    |=  [=ship =cush]
-    ^+  mo-state
-    ::
-    =/  =prey  [%high [~ ship]]
-    (mo-club p.cush prey q.cush)
-  ::
   ::  +mo-cyst-core: receive a core.
   ::
   ++  mo-cyst-core
@@ -756,13 +747,17 @@
     =/  clubbed  (ap-club:pap club)
     ap-abet:clubbed
   ::
-  ::  +mo-club: local action.
+  ::  +mo-come: handle locally
   ::
-  ++  mo-club
-    |=  [=dude =prey =club]
+  ++  mo-come
+    |=  [=ship =cush]
     ^+  mo-state
     ::
     =/  default-sofa  *sofa
+    ::
+    =/  =prey  [%high [~ ship]]
+    =/  =dude  p.cush
+    =/  =club  q.cush
     ::
     ?:  |(!(~(has by bum.mas) dude) (~(has by wub.mas) dude))
       ~&  >>  [%mo-not-running dude -.club]
