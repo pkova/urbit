@@ -143,14 +143,8 @@
   ++  mo-abet
     ^-  [(list move) _mo-context]
     ::
-    :_  mo-context
-    =/  reshape
-      |=  mov=move
-      ^-  move
-      ?.  ?=(%pass -.q.mov)
-        mov
-      [p.mov %pass p.q.mov q.q.mov]
-    [(flop (turn moves reshape))]
+    =/  resolved  (flop moves)
+    [resolved mo-context]
   ::
   ::  +mo-conf: send an %exec to ford using a beak assembled with the current
   ::            timestamp.
