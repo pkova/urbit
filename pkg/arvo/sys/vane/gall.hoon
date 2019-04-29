@@ -851,8 +851,6 @@
   ++  ap
     ~%  %gall-ap  +>  ~
     ::
-    :: FIXME refactor this into something sane
-    ::
     |_  $:  dap=dude
             pry=prey
             ost=bone
@@ -863,35 +861,41 @@
     ::
     ++  ap-state  .
     ::
-    ::  +ap-abed: initialise.
+    ::  +ap-abed: initialise the provided app with the supplied privilege.
     ::
     ++  ap-abed
       ~/  %ap-abed
       |=  [=dude =prey]
       ^+  ap-state
       ::
-      :: =/  =seat  (~(got by bum.mas) dude) :: FIXME
+      =/  =seat
+        =/  sitting  (~(got by bum.mas) dude)
+        =/  =stic
+          =/  stat  tyc.sitting
+          =/  nact  +(act.stat)
+          =/  trop  (shaz (mix (add dude nact) eny))
+          [act=nact eny=trop lat=now]
+        sitting(tyc stic)
       ::
-      =:  dap   dude
-          pry   prey
-          sat  `seat`(~(got by bum.mas) dude) :: FIXME lark
-      ==
+      =/  bone  p.zam.seat
+      =/  bone-duct  q.zam.seat
+      =/  duct-bone  r.zam.seat
       ::
-      =/  unt  (~(get by q.zam.sat) hen)
+      =/  maybe-bone  (~(get by bone-duct) hen)
       ::
-      =:  act.tyc.sat  +(act.tyc.sat)
-          eny.tyc.sat  (shaz (mix (add dude act.tyc.sat) eny))
-          lat.tyc.sat  now
-      ==
+      ?^  maybe-bone
+        =/  bone  u.maybe-bone
+        ap-state(dap dude, pry prey, sat seat, ost bone)
       ::
-      ?^  unt
-        ap-state(ost u.unt)
+      =/  =scar
+        =/  bone  +(bone)
+        =/  bone-duct  (~(put by bone-duct) hen bone)
+        =/  duct-bone  (~(put by duct-bone) bone hen)
+        [p=bone q=bone-duct r=duct-bone]
       ::
       %=  ap-state
-        ost      p.zam.sat
-        p.zam.sat    +(p.zam.sat)
-        q.zam.sat    (~(put by q.zam.sat) hen p.zam.sat)
-        r.zam.sat    (~(put by r.zam.sat) p.zam.sat hen)
+        ost      bone
+        zam.sat  scar
       ==
     ::
     ::  +ap-abet: resolve moves.
@@ -902,7 +906,7 @@
       =>  ap-abut
       %_  mo-state
         bum.mas  (~(put by bum.mas) dap sat)
-        moves  :(weld (turn zip ap-aver) (turn dub ap-avid) moves)
+        moves  :(weld (turn zip ap-aver) (turn dub ap-avid) moves) :: FIXME
       ==
     ::
     ::  +ap-abut: track queue.
@@ -910,59 +914,90 @@
     ++  ap-abut
       ^+  ap-state
       ::
-      =+  [pyz=zip ful=*(set bone)]
-      |-
-      ^+  ap-state
-      ?^  pyz
-        ?.  ?=([%give %diff *] q.i.pyz)
-          $(pyz t.pyz)
-        =^  vad  ap-state  ap-fill(ost p.i.pyz)
-        $(pyz t.pyz, ful ?:(vad ful (~(put in ful) p.i.pyz)))
+      =/  coves  zip
+      =/  bones  *(set bone)
       ::
-      =/  ded  ~(tap in ful)
-      |-
-      ^+  ap-state
-      ?~  ded  ap-state
-      =>  %*(. $(ded t.ded) ost i.ded)
+      |-  ^+  ap-state
+      ?^  coves
+        ?.  ?=([%give %diff *] q.i.coves)
+          $(coves t.coves)
+        ::
+        =^  added  ap-state  ap-fill(ost p.i.coves)
+        ::
+        =/  ribs
+          ?:  added
+            bones
+          (~(put in bones) p.i.coves)
+        ::
+        $(coves t.coves, bones ribs)
+      ::
+      =/  boned  ~(tap in bones)
+      ::
+      |-  ^+  ap-state
+      ?~  boned
+        ap-state
+      =>  %*(. $(boned t.boned) ost i.boned) :: FIXME
       ::
       =/  tib  (~(get by sup.ged.sat) ost)
       ::
-      ?~  tib  ~&([%ap-abut-bad-bone dap ost] ..ap-kill)
+      ?~  tib
+        ~&  [%ap-abut-bad-bone dap ost]
+        ..ap-kill
       ap-kill(q.q.pry p.u.tib)
     ::
     ::  +ap-aver: cove to move.
     ::
     ++  ap-aver
       ~/  %ap-aver
-      |=  cov=cove
+      |=  =cove
       ^-  move
       ::
-      :-  (~(got by r.zam.sat) p.cov)
-      ?-    -.q.cov
-          ?(%slip %sick)  !!
+      :-  (~(got by r.zam.sat) p.cove)
+      ?-    -.q.cove
+          ::
+          %slip  !!
+          ::
+          %sick  !!
+          ::
           %give
-        ?<  =(0 p.cov)
-        ?.  ?=(%diff -.p.q.cov)
-          [%give %unto p.q.cov]
+          ::
+        ?<  =(0 p.cove)
+        ?.  ?=(%diff -.p.q.cove)
+          [%give %unto p.q.cove]
         ::
-        =/  cay=cage  p.p.q.cov
-        =/  mar  (fall (~(get by pyl.sat) p.cov) p.cay)
+        =/  =cage  p.p.q.cove
+        =/  =mark  (fall (~(get by pyl.sat) p.cove) p.cage)
         ::
-        ?:  =(mar p.cay)  [%give %unto p.q.cov]
-        :+  %pass
-          [%sys %pel dap ~]
-        [%f %build live=%.n [%cast [p q]:(mo-beak dap) mar [%$ cay]]]
-      ::
+        ?:  =(mark p.cage)
+          [%give %unto p.q.cove]
+        ::
+        =/  =path  /sys/pel/[dap]
+        =/  =schematic:ford
+          =/  =beak  (mo-beak dap)
+          [%cast [p q]:beak mark [%$ cage]]
+        ::
+        =/  =note-arvo  [%f %build live=%.n schematic]
+        [%pass path note-arvo]
+          ::
           %pass
-        :+  %pass  `path`[%use dap p.q.cov]
-        ?-  -.q.q.cov
-          %send  `note-arvo`[%g %deal [our p.q.q.cov] q.q.q.cov]
-          %meta  `note-arvo`[`@tas`p.q.q.cov %meta `vase`q.q.q.cov]
-        ==
         ::
-        :: I'm sort of stumped on how to get a %give out of the above; it's
-        :: just turning %cove into a %pass instead.
+        =/  =path  /sys/pel/[dap]
+        =/  =schematic:ford
+          =/  =beak  (mo-beak dap)
+          [%cast [p q]:beak mark [%$ cage]]
         ::
+        =/  =note-arvo  [%f %build live=%.n schematic]
+        [%pass path note-arvo]
+          ::
+          %pass
+          ::
+        =/  =path  [%use dap p.q.cove]
+        =/  =note-arvo
+          ?-  -.q.q.cove
+            %send  [%g %deal [our p.q.q.cove] q.q.q.cove]
+            %meta  [`@tas`p.q.q.cove %meta `vase`q.q.q.cove]
+          ==
+        [%pass path note-arvo]
       ==
     ::
     ::  +ap-avid: onto results.
