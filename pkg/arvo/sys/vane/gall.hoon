@@ -474,7 +474,7 @@
       ~&  [%diff-bad-ack coop]
       mo-state
     ~&  [%diff-bad-ack %mack]
-    =/  slaw  (slog (flop q.,.+>.coop)) :: kill this lark
+    =/  slaw  (slog (flop q.,.+>.coop)) :: FIXME kill this lark
     (slaw mo-state)
   ::
   ::  +mo-cyst-rep: reverse request.
@@ -640,7 +640,7 @@
       ~&  [%mo-cook-bad-path path]
       !!
     ::
-    =/  pap
+    =/  initialised
       =/  =term  i.path
       =/  =ffuc  [~ (slav %p i.t.path)]
       =/  =prey  [%high ffuc]
@@ -654,7 +654,7 @@
         ::
         %inn
         ::
-      =/  poured  (ap-pour:pap t.t.t.path vax)
+      =/  poured  (ap-pour:initialised t.t.t.path vax)
       ap-abet:poured
         ::
         %cay
@@ -663,7 +663,7 @@
         ~&  [%mo-cook-weird q.hin]
         ~&  [%mo-cook-weird-path path]
         mo-state
-      =/  purred  (ap-purr:pap +<.q.hin t.t.t.path +>.q.hin)
+      =/  purred  (ap-purr:initialised +<.q.hin t.t.t.path +>.q.hin)
       ap-abet:purred
         ::
         %out
@@ -672,7 +672,7 @@
         ~&  [%mo-cook-weird q.hin]
         ~&  [%mo-cook-weird-path path]
         mo-state
-      =/  pouted  (ap-pout:pap t.t.t.path +>.q.hin)
+      =/  pouted  (ap-pout:initialised t.t.t.path +>.q.hin)
       ap-abet:pouted
     ==
   ::
@@ -692,8 +692,7 @@
     ::
     =/  =sofa  u.maybe-sofa
     ::
-    |-
-    ^+  mo-state
+    |-  ^+  mo-state
     ?:  =(~ sofa)
       %_  mo-state
         wub.mas  (~(del by wub.mas) dude)
@@ -728,8 +727,8 @@
     |=  [=dude =prey =term =path]
     ^-  (unit (unit cage))
     ::
-    =/  pap  (ap-abed:ap dude prey)
-    (ap-peek:pap term path)
+    =/  initialised  (ap-abed:ap dude prey)
+    (ap-peek:initialised term path)
   ::
   ::  +mo-clip: apply club.
   ::
@@ -759,17 +758,15 @@
       =/  err  (some p.club)
       (mo-give %unto %reap err)
     ::
-    =/  pap  (ap-abed:ap dude prey)
-    =/  clubbed  (ap-club:pap club)
-    ap-abet:clubbed
+    =/  initialised  (ap-abed:ap dude prey)
+    =/  applied  (ap-club:initialised club)
+    ap-abet:applied
   ::
   ::  +mo-come: handle locally.
   ::
   ++  mo-come
     |=  [=ship =cush]
     ^+  mo-state
-    ::
-    =/  default-sofa  *sofa
     ::
     =/  =prey  [%high [~ ship]]
     =/  =dude  p.cush
@@ -779,11 +776,10 @@
     =/  is-waiting  (~(has by wub.mas) dude)
     ::
     ?:  |(!is-running is-waiting)
-      ~&  >>  [%mo-not-running dude -.club] :: FIXME remove?
       ::
       =/  =sofa
         =/  waiting  (~(get by wub.mas) dude)
-        =/  kisses  (fall waiting default-sofa)
+        =/  kisses  (fall waiting *sofa)
         =/  kiss  [hen prey club]
         (~(put to kisses) kiss)
       ::
@@ -828,6 +824,7 @@
     ?-    -.roon
         ::
         %d
+        ::
       =/  =path
         =/  him  (scot %p ship)
         =/  num  (scot %ud bone)
@@ -842,12 +839,15 @@
       (mo-pass path note-arvo)
         ::
         %x
+        ::
       ::  XX should crash
       =.  mo-state  (mo-give %mack ~)
       ::
-      =/  out  (mo-ball ship bone)
-      =/  abedded  (mo-abed out)
-      (mo-give:abedded %unto %quit ~)
+      =/  initialised
+        =/  out  (mo-ball ship bone)
+        (mo-abed out)
+      ::
+      (mo-give:initialised %unto %quit ~)
     ==
   ::
   ::  +ap: agent engine
@@ -1615,7 +1615,6 @@
         :^  %.y  bone  %pass
         :-  [(scot %p q.q.vase) %out r.q.vase u.pux]
         ^-  cote
-        ::  ~&  [%ap-move-send `path`[(scot %p q.q.vase) %out r.q.vase u.pux]]
         [%send q.q.vase r.q.vase %poke p.t.q.vase geb]
       ::
       :_  ap-state
@@ -1625,7 +1624,6 @@
         [%.n tang]
       :^  %&  bone  %pass
       :-  [(scot %p q.q.vase) %out r.q.vase u.pux]
-      ::  ~&  [%ap-move-send `path`[(scot %p q.q.vase) %out r.q.vase u.pux]]
       [%send q.q.vase r.q.vase u.cob]
     ::
     ::  +ap-pass: request action.
@@ -1801,10 +1799,10 @@
       ^+  ap-state
       ::
       ?-  -.cuft
-        %coup  (ap-take q.q.pry %coup +.path (some !>(p.cuft)))
+        %coup  (ap-take %coup +.path (some !>(p.cuft)))
         %diff  (ap-diff q.q.pry path p.cuft)
-        %quit  (ap-take q.q.pry %quit +.path ~)
-        %reap  (ap-take q.q.pry %reap +.path (some !>(p.cuft)))
+        %quit  (ap-take %quit +.path ~)
+        %reap  (ap-take %reap +.path (some !>(p.cuft)))
         %http-response  !!
       ==
     ::
@@ -1905,7 +1903,7 @@
     ::
     ++  ap-take
       ~/  %ap-take
-      |=  [=ship =term =path vux=(unit vase)] :: FIXME delete first arg
+      |=  [=term =path vux=(unit vase)]
       ^+  ap-state
       ::
       =^  cug  ap-state  (ap-find term path)
@@ -2100,6 +2098,8 @@
   ::
   =>  .(q.hic ?.(?=($soft -.q.hic) q.hic ;;(task:able p.q.hic)))
   ::
+  =/  initialised  (mo-abed:mo duct)
+  ::
   ?-    -.q.hic
       ::
       %conf
@@ -2110,45 +2110,47 @@
       ~&  [%gall-not-ours ship]
       [~ gall-payload]
     ::
-    =/  booted
-      =/  initialised  (mo-abed:mo duct)
-      =/  =dude  q.dock
-      =/  des  q.q.hic
-      (mo-boot:initialised dude des)
-    ::
+    =/  booted  (mo-boot:initialised q.dock q.q.hic)
     mo-abet:booted
       ::
       %deal
       ::
     =<  mo-abet
-    ?.  =(our q.p.q.hic)                                ::  either to us
-      ?>  =(our p.p.q.hic)                              ::  or from us
-      (mo-away:(mo-abed:mo duct) q.p.q.hic q.q.hic)
-    (mo-come:(mo-abed:mo duct) p.p.q.hic q.q.hic)
+    :: either to us
+    ::
+    ?.  =(our q.p.q.hic)
+      :: or from us
+      ::
+      ?>  =(our p.p.q.hic)
+      (mo-away:initialised q.p.q.hic q.q.hic)
+    (mo-come:initialised p.p.q.hic q.q.hic)
       ::
       %init
       ::
     [~ gall-payload(sys.mast.all duct)]
       ::
-      %sunk  [~ gall-payload]
+      %sunk
       ::
+    [~ gall-payload]
       ::
-      %vega  [~ gall-payload]
+      %vega
       ::
+    [~ gall-payload]
       ::
       %west
       ::
     ?>  ?=([?(%ge %gh) @ ~] q.q.hic)
     =*  dap  i.t.q.q.hic
     =*  him  p.q.hic
+    ::
     ?:  ?=(%ge i.q.q.hic)
-      =+  mes=;;({@ud rook} r.q.hic)
+      =/  mes  ;;({@ud rook} r.q.hic)
       =<  mo-abet
-      (mo-gawk:(mo-abed:mo duct) him dap mes)
-    =+  mes=;;({@ud roon} r.q.hic)
+      (mo-gawk:initialised him dap mes)
+    ::
+    =/  mes  ;;({@ud roon} r.q.hic)
     =<  mo-abet
-    (mo-gawd:(mo-abed:mo duct) him dap mes)
-  ::
+    (mo-gawd:initialised him dap mes)
       ::
       %wegh
       ::
@@ -2174,34 +2176,49 @@
       %0  gall-payload(all old)
   ==
 ::
+::  +scry: standard scry.
+::
 ++  scry
   ~/  %gall-scry
-  |=  {fur/(unit (set monk)) ren/@tas why/shop syd/desk lot/coin tyl/path}
+  |=  [fur=(unit (set monk)) ren=@tas why=shop syd=desk lot=coin tyl=path]
   ^-  (unit (unit cage))
-  ?.  ?=(%& -.why)  ~
+  ?.  ?=(%.y -.why)
+    ~
+  ::
   =*  his  p.why
+  ::
   ?:  ?&  =(%u ren)
           =(~ tyl)
           =([%$ %da now] lot)
           =(our his)
       ==
     ``[%noun !>((~(has by bum.mast.all) syd))]
+  ::
   ?.  =(our his)
     ~
+  ::
   ?.  =([%$ %da now] lot)
     ~
+  ::
   ?.  (~(has by bum.mast.all) syd)
     [~ ~]
+  ::
   ?.  ?=(^ tyl)
     ~
+  ::
   (mo-peek:mo-abed:mo syd high+`his ren tyl)
 ::
-++  stay                                                ::  save w+o cache
-  `axle`all
+::  +stay: save without cache.
 ::
-++  take                                                ::  response
+++  stay
+  ^-  axle
+  all
+::
+::  +take: response.
+::
+++  take
   ~/  %gall-take
-  |=  {tea/wire hen/duct hin/(hypo sign-arvo)}
+  |=  [tea=wire hen=duct hin=(hypo sign-arvo)]
   ^+  [*(list move) ..^$]
   ~|  [%gall-take tea]
   ?>  ?=([?($sys $use) *] tea)
