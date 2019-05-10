@@ -22,36 +22,38 @@
 ::
 ++  volt  ?(%low %high)
 ::
-::  +torc: security control.
+::  +security-control: security control.
 ::
-++  torc  $@(?(%iron %gold) [%lead p=ship])
+++  security-control  $@(?(%iron %gold) [%lead p=ship])
 ::
-::  +roon: reverse ames message.
+::  +reverse-ames: reverse ames message.
 ::
-++  roon
+++  reverse-ames
   $%
-      :: diff (diff)
+      :: diff
       ::
-      [%d p=mark q=*]
-      [%x ~]
+      [action=%d p=mark q=*]
+      ::  etc.
+      ::
+      [action=%x ~]
   ==
 ::
-::  +rook: forward ames message.
+::  +forward-ames: forward ames message.
 ::
-++  rook
+++  forward-ames
   $%
       :: message
       ::
-      [%m p=mark q=*]
+      [action=%m mark=mark noun=*]
       :: "peel" subscribe
       ::
-      [%l p=mark q=path]
+      [action=%l mark=mark path=path]
       :: subscribe
       ::
-      [%s p=path]
+      [action=%s path=path]
       :: cancel+unsubscribe
       ::
-      [%u ~]
+      [action=%u ~]
   ==
 ::
 ::  +foreign-response: foreign response.
@@ -62,7 +64,6 @@
       %poke
       %pull
   ==
-::
 --
 ::
 ::  (local arvo)
@@ -72,9 +73,9 @@
 ::  +cote: +ap note.
 ::
 ++  cote
-  $%  [%meta p=@tas q=vase]
-      [%send p=ship q=cush]
-      [%hiss p=(unit knot) q=mark r=cage]
+  $%  [note=%meta =term =vase]
+      [note=%send =ship =cush]
+      [note=%hiss knot=(unit knot) =mark =cage]
   ==
 ::
 ::  +internal-move: internal move.
@@ -137,7 +138,7 @@
       system-duct=duct
       ::  foreign contacts
       ::
-      foreign=(map ship foreign)
+      contacts=(map ship foreign)
       ::  running agents
       ::
       running=(map dude agent)
@@ -146,16 +147,16 @@
       waiting=(map dude blocked)
   ==
 ::
-::  +cuff: new cuff.
+::  +routes: new cuff.
 ::
-++  cuff
+++  routes
     $:
         :: disclosing to
         ::
-        disclosing-to=(unit (set ship))
+        disclosing=(unit (set ship))
         :: attributed to
         ::
-        attributed-to=ship
+        attributing=ship
     ==
 ::
 ::  +privilege: privilege.
@@ -165,9 +166,9 @@
         :: voltage
         ::
         =volt
-        :: new cuff
+        :: routes
         ::
-        =cuff
+        =routes
     ==
 ::
 ::  +foreign: foreign connections.
@@ -179,10 +180,10 @@
       index=@ud
       :: by duct
       ::
-      duct-index=(map duct @ud)
+      index-map=(map duct @ud)
       :: by index
       ::
-      index-duct=(map @ud duct)
+      duct-map=(map @ud duct)
   ==
 ::
 ::  +opaque-input: opaque input.
@@ -229,7 +230,7 @@
       live=?
       :: privilege
       ::
-      privilege=torc
+      privilege=security-control
       :: statistics
       ::
       stats=stats
@@ -241,7 +242,7 @@
       running-state=vase
       :: update control
       ::
-      update-control=beak
+      beak=beak
       :: req'd translations
       ::
       required-trans=(map bone mark)
@@ -381,7 +382,7 @@
     ^-  ?
     ::
     ::  inferred type of default bowl
-    =*  bowl-type  -:!>(*bowl)
+    =/  bowl-type  -:!>(*bowl)
     ::
     =/  maybe-vase  (slew 12 vase)
     ?~  maybe-vase
@@ -414,7 +415,7 @@
     ?^  app-data
       ::  update the path
       ::
-      =/  updated  u.app-data(update-control beak)
+      =/  updated  u.app-data(beak beak)
       ::
       =.  running.ship-state.gall
         (~(put by running.ship-state.gall) dude updated)
@@ -422,8 +423,8 @@
       ::  magic update string from the old +mo-boon, "complete old boot"
       ::
       =/  =privilege
-        =/  =cuff  [disclosing-to=~ attributed-to=our]
-        [%high cuff]
+        =/  =routes  [disclosing=~ attributing=our]
+        [%high routes]
       ::
       =/  initialised  (ap-abed:ap dude privilege)
       =/  peeped  (ap-peep:initialised result-vase)
@@ -439,8 +440,8 @@
     =/  old  mo-state
     ::
     =/  wag
-      =/  =cuff  [disclosing-to=~ attributed-to=our]
-      =/  =privilege  [%high cuff]
+      =/  =routes  [disclosing=~ attributing=our]
+      =/  =privilege  [%high routes]
       =/  initialised  (ap-abed:ap dude privilege)
       (ap-prop:initialised ~)
     ::
@@ -467,18 +468,17 @@
         bone-map=[[[~ ~] 0] ~ ~]
        duct-map=[[0 [~ ~]] ~ ~]
     ::
-    =/  =agent  *agent
-    ::
-    =/  new-agent
-      %_  agent
+    =/  agent
+      =/  default-agent  *agent
+      %_  default-agent
         control-duct    hen
-        update-control  beak
+        beak            beak
         running-state   vase
-        ducts    opaque-input
+        ducts           opaque-input
       ==
     ::
     =/  agents
-      (~(put by running.ship-state.gall) dude new-agent)
+      (~(put by running.ship-state.gall) dude agent)
     ::
     %_  mo-state
       running.ship-state.gall  agents
@@ -511,7 +511,7 @@
     ::
     =^  bone  mo-state  (mo-bale ship)
     ::
-    =/  =rook
+    =/  =forward-ames
       ?-  -.club
         %poke  [%m p.p.club q.q.p.club]
         %pull  [%u ~]
@@ -525,7 +525,7 @@
       =/  action  -.club
       /sys/way/[action]
     ::
-    =/  =note-arvo  [%a %want ship [%g %ge dude ~] [bone rook]]
+    =/  =note-arvo  [%a %want ship [%g %ge dude ~] [bone forward-ames]]
     ::
     (mo-pass path note-arvo)
   ::
@@ -562,29 +562,28 @@
     ^-  [bone _mo-state]
     ::
     =/  =foreign
-      =/  default  [1 ~ ~]
-      =/  existing  (~(get by foreign.ship-state.gall) ship)
-      (fall existing default)
+      =/  existing  (~(get by contacts.ship-state.gall) ship)
+      (fall existing [1 ~ ~])
     ::
-    =/  nom  (~(get by duct-index.foreign) hen)
+    =/  existing  (~(get by index-map.foreign) hen)
     ::
-    ?^  nom
-      [u.nom mo-state]
+    ?^  existing
+      [u.existing mo-state]
     ::
     =/  index  index.foreign
     ::
-    =/  contacts
+    =/  new-foreign
       %_  foreign
-        index       +(index)
-        duct-index  (~(put by duct-index.foreign) hen index)
-        index-duct  (~(put by index-duct.foreign) index hen)
+        index      +(index)
+        index-map  (~(put by index-map.foreign) hen index)
+        duct-map   (~(put by duct-map.foreign) index hen)
       ==
     ::
-    =/  foreigners  (~(put by foreign.ship-state.gall) ship contacts)
+    =/  contacts  (~(put by contacts.ship-state.gall) ship new-foreign)
     ::
     =/  next
       %_  mo-state
-        foreign.ship-state.gall  foreigners
+        contacts.ship-state.gall  contacts
       ==
     ::
     [index next]
@@ -595,8 +594,8 @@
     |=  [=ship index=@ud]
     ^-  duct
     ::
-    =/  =foreign  (~(got by foreign.ship-state.gall) ship)
-    (~(got by index-duct.foreign) index)
+    =/  =foreign  (~(got by contacts.ship-state.gall) ship)
+    (~(got by duct-map.foreign) index)
   ::
   ::  +mo-cyst-core: receive a core.
   ::
@@ -758,13 +757,21 @@
         %diff
         ::
       =/  sys-path  [%sys %red t.path]
-      =/  note-arvo  [%a %want him [%g %gh dap ~] [num %d p.p.cuft q.q.p.cuft]]
+      =/  =note-arvo
+        =/  path  [%g %gh dap ~]
+        =/  noun  [num %d p.p.cuft q.q.p.cuft]
+        [%a %want him path noun]
+      ::
       (mo-pass sys-path note-arvo)
         ::
         %quit
         ::
       =/  sys-path  [%sys path]
-      =/  note-arvo  [%a %want him [%g %gh dap ~] [num %x ~]]
+      =/  =note-arvo
+        =/  path  [%g %gh dap ~]
+        =/  noun  [num %x ~]
+        [%a %want him path noun]
+      ::
       (mo-pass sys-path note-arvo)
         ::
         %reap
@@ -795,8 +802,8 @@
       (mo-give %unto %coup err)
     ::
     =/  =privilege
-      =/  =cuff  [disclosing-to=~ attributed-to=ship]
-      [%high cuff]
+      =/  =routes  [disclosing=~ attributing=ship]
+      [%high routes]
     ::
     =/  =cage  (result-to-cage:ford build-result)
     =/  =club  [%poke cage]
@@ -811,10 +818,10 @@
     ?>  ?=([%a %woot *] sign-arvo)
     ?>  ?=([@ @ ~] path)
     ::
-    =/  why  (foreign-response i.t.path)
+    =/  =foreign-response  (foreign-response i.t.path)
     =/  art  +>+.sign-arvo
     ::
-    (mo-awed why art)
+    (mo-awed foreign-response art)
   ::
   ::  +mo-cyst: take in /sys.
   ::
@@ -848,12 +855,13 @@
       =/  =term  i.path
       =/  =privilege
         =/  =ship  (slav %p i.t.path)
-        =/  =cuff  [disclosing-to=~ attributed-to=ship]
-        [%high cuff]
+        =/  =routes  [disclosing=~ attributing=ship]
+        [%high routes]
       ::
       (ap-abed:ap term privilege)
     ::
     =/  =vase  (slot 3 hin)
+    =/  =sign-arvo  q.hin
     ::
     ?-  i.t.t.path
         ::
@@ -864,23 +872,28 @@
         ::
         %cay
         ::
-      ?.  ?=([%e %sigh *] q.hin)
-        ~&  [%mo-cook-weird q.hin]
+      ?.  ?=([%e %sigh *] sign-arvo)
+        ~&  [%mo-cook-weird sign-arvo]
         ~&  [%mo-cook-weird-path path]
         mo-state
       ::
-      :: FIXME kill larks
-      =/  purred  (ap-purr:initialised +<.q.hin t.t.t.path +>.q.hin)
+      =/  purred
+        =/  =cage  +>.sign-arvo
+        (ap-purr:initialised %sigh t.t.t.path cage)
+      ::
       ap-abet:purred
         ::
         %out
         ::
-      ?.  ?=([%g %unto *] q.hin)
-        ~&  [%mo-cook-weird q.hin]
+      ?.  ?=([%g %unto *] sign-arvo)
+        ~&  [%mo-cook-weird sign-arvo]
         ~&  [%mo-cook-weird-path path]
         mo-state
-      :: FIXME kill lark
-      =/  pouted  (ap-pout:initialised t.t.t.path +>.q.hin)
+      ::
+      =/  pouted
+        =/  =cuft  +>.sign-arvo
+        (ap-pout:initialised t.t.t.path cuft)
+      ::
       ap-abet:pouted
     ==
   ::
@@ -907,14 +920,18 @@
         waiting.ship-state.gall  (~(del by waiting.ship-state.gall) dude)
       ==
     ::
-    =^  trip  blocked  [p q]:~(get to blocked)
+    =^  kiss  blocked  [p q]:~(get to blocked)
     ::
-    =/  =duct  p.trip
-    =/  =privilege  q.trip
-    =/  =club  r.trip
+    =/  =duct  p.kiss
+    =/  =privilege  q.kiss
+    =/  =club  r.kiss
     ::
     =/  move
-      [duct [%slip %g %deal [attributed-to.cuff.privilege our] dude club]]
+      =/  =sock  [attributing.routes.privilege our]
+      =/  =cush  [dude club]
+      =/  action  [%slip %g %deal sock cush]
+      [duct action]
+    ::
     $(moves [move moves])
   ::
   ::  +mo-beak: build beak.
@@ -924,10 +941,12 @@
     ^-  beak
     ::
     =/  =beak
-      =/  ship-state  (~(got by running.ship-state.gall) dude)
-      update-control:ship-state
+      =/  running  (~(got by running.ship-state.gall) dude)
+      beak.running
     ::
-    ?.  =(p.beak our)
+    =/  =ship  p.beak
+    ::
+    ?.  =(ship our)
       beak
     beak(r [%da now])
   ::
@@ -948,20 +967,20 @@
     ^+  mo-state
     ::
     =/  =path
-      =/  ship  (scot %p attributed-to.cuff.privilege)
+      =/  ship  (scot %p attributing.routes.privilege)
       /sys/val/[ship]/[dude]
     ::
-    =/  ship-info
+    =/  ship-desk
       =/  =beak  (mo-beak dude)
       [p q]:beak
     ::
     ?:  ?=(%puff -.club)
-      =/  =schematic:ford  [%vale ship-info +.club]
+      =/  =schematic:ford  [%vale ship-desk +.club]
       =/  =note-arvo  [%f %build live=%.n schematic]
       (mo-pass path note-arvo)
     ::
     ?:  ?=(%punk -.club)
-      =/  =schematic:ford  [%cast ship-info p.club [%$ q.club]]
+      =/  =schematic:ford  [%cast ship-desk p.club [%$ q.club]]
       =/  =note-arvo  [%f %build live=%.n schematic]
       (mo-pass path note-arvo)
     ::
@@ -980,8 +999,8 @@
     ^+  mo-state
     ::
     =/  =privilege
-      =/  =cuff  [disclosing-to=~ attributed-to=ship]
-      [%high cuff]
+      =/  =routes  [disclosing=~ attributing=ship]
+      [%high routes]
     ::
     =/  =dude  p.cush
     =/  =club  q.cush
@@ -1008,11 +1027,11 @@
   ::  +mo-gawk: ames forward.
   ::
   ++  mo-gawk
-    |=  [=ship =dude =bone =rook]
+    |=  [=ship =dude =bone =forward-ames]
     ^+  mo-state
     ::
     =.  mo-state
-      ?.  ?=(%u -.rook)
+      ?.  ?=(%u action.forward-ames)
         mo-state
       (mo-give %mack ~)
     ::
@@ -1021,12 +1040,38 @@
       =/  num  (scot %ud bone)
       /sys/req/[him]/[dude]/[num]
     ::
+    =/  =sock  [ship our]
+    ::
     =/  =note-arvo
-      ?-  -.rook
-        %m  [%g %deal [ship our] dude %puff p.rook q.rook]
-        %l  [%g %deal [ship our] dude %peel p.rook q.rook]
-        %s  [%g %deal [ship our] dude %peer p.rook]
-        %u  [%g %deal [ship our] dude %pull ~]
+      ?-  action.forward-ames
+          ::
+          %m
+          ::
+        =/  =task:able
+          =/  =cush  [dude %puff mark.forward-ames noun.forward-ames]
+          [%deal sock cush]
+        [%g task]
+          ::
+          %l
+          ::
+        =/  =task:able
+          =/  =cush  [dude %peel mark.forward-ames path.forward-ames]
+          [%deal sock cush]
+        [%g task]
+          ::
+          %s
+          ::
+        =/  =task:able
+          =/  =cush  [dude %peer path.forward-ames]
+          [%deal sock cush]
+        [%g task]
+          ::
+          %u
+          ::
+        =/  =task:able
+          =/  =cush  [dude %pull ~]
+          [%deal sock cush]
+        [%g task]
       ==
     ::
     (mo-pass path note-arvo)
@@ -1034,10 +1079,10 @@
   ::  +mo-gawd: ames backward.
   ::
   ++  mo-gawd
-    |=  [=ship =dude =bone =roon]
+    |=  [=ship =dude =bone =reverse-ames]
     ^+  mo-state
     ::
-    ?-    -.roon
+    ?-    action.reverse-ames
         ::
         %d
         ::
@@ -1049,7 +1094,7 @@
       =/  =note-arvo
         =/  beak  (mo-beak dude)
         =/  info  [p q]:beak
-        =/  =schematic:ford  [%vale info p.roon q.roon]
+        =/  =schematic:ford  [%vale info p.reverse-ames q.reverse-ames]
         [%f %build live=%.n schematic]
       ::
       (mo-pass path note-arvo)
@@ -1172,7 +1217,7 @@
         ~&  [%ap-abut-bad-bone dap ost]
         ap-state
       ::
-      ap-kill(attributed-to.cuff.pry p.u.tib)
+      ap-kill(attributing.routes.pry p.u.tib)
     ::
     ::  +ap-aver: internal move to move.
     ::
@@ -1224,18 +1269,18 @@
             ::
           =/  =path  [%use dap p.move.internal-move]
           =/  =note-arvo
-            ?-  -.q.move.internal-move
+            ?-  note.q.move.internal-move
                 ::
                 %send
                 ::
-              =/  =sock  [our p.q.move.internal-move]
-              =/  =cush  [q.q.move.internal-move]
+              =/  =sock  [our ship.q.move.internal-move]
+              =/  =cush  cush.q.move.internal-move
               [%g %deal sock cush]
                 ::
                 %meta
                 ::
-              =/  =term  p.q.move.internal-move
-              =/  =vase  q.q.move.internal-move
+              =/  =term  term.q.move.internal-move
+              =/  =vase  vase.q.move.internal-move
               [term %meta vase]
             ==
           [%pass path note-arvo]
@@ -1277,7 +1322,7 @@
       |=  [=term tyl=path]
       ^-  (unit (unit cage))
       ::
-      =+
+      =/  marked
         ?.  ?=(%x term)
           [mark=%$ tyl=tyl]
         ::
@@ -1286,13 +1331,16 @@
         ?>  ?=(^ path)
         [mark=i.path tyl=(flop t.path)]
       ::
-      =^  cug  ap-state  (ap-find %peek term tyl)
+      =/  =mark  mark.marked
+      =/  tyl  tyl.marked
       ::
-      ?~  cug
+      =^  maybe-arm  ap-state  (ap-find %peek term tyl)
+      ::
+      ?~  maybe-arm
         =/  =tank  [%leaf "peek find fail"]
         ((slog tank >tyl< >mark< ~) [~ ~])
       ::
-      =^  arm  ap-state  (ap-farm q.u.cug)
+      =^  arm  ap-state  (ap-farm q.u.maybe-arm)
       ::
       ?:  ?=(%.n -.arm)
         =/  =tank  [%leaf "peek farm fail"]
@@ -1300,8 +1348,8 @@
       ::
       =/  slammed
         =/  =path  [term tyl]
-        =/  =vase  !>((slag p.u.cug path))
-        (ap-slam q.u.cug p.arm vase)
+        =/  =vase  !>((slag p.u.maybe-arm path))
+        (ap-slam q.u.maybe-arm p.arm vase)
       ::
       =^  zem  ap-state  slammed
       ::
@@ -1314,11 +1362,17 @@
         ((slog tank ~) [~ ~])
       ::
       ?+  q.p.zem  err
-          ~              ~
-       ::
-          [~ ~]         [~ ~]
-       ::
+          ::
+          ~
+          ::
+        ~
+          ::
+          [~ ~]
+          ::
+        [~ ~]
+          ::
           [~ ~ ^]
+          ::
         =/  =vase  (sped (slot 7 p.zem))
         ::
         ?.  ?=([p=@ *] q.vase)
@@ -1547,7 +1601,7 @@
           +12.q.running-state.sat
         ^-   bowl
         :*  :*  our                               ::  host
-                attributed-to.cuff.pry            ::  guest
+                attributing.routes.pry            ::  guest
                 dap                               ::  agent
             ==                                    ::
             :*  wex=~                             ::  outgoing
@@ -1557,7 +1611,7 @@
                 change=change.stats.sat           ::  tick
                 eny=eny.stats.sat                 ::  nonce
                 now=time.stats.sat                ::  time
-                byk=update-control.sat            ::  source
+                byk=beak.sat                      ::  source
         ==  ==                                    ::
       ==
     ::
@@ -1710,7 +1764,7 @@
       ::
       :_  ap-state
       :^  %.y  bone  %pass
-      :-  [(scot %p attributed-to.cuff.pry) %inn u.pux]
+      :-  [(scot %p attributing.routes.pry) %inn u.pux]
       [%meta u.huj (slop (ap-term %tas noun) tel)]
     ::
     ::  +ap-move-poke: pass %poke.
@@ -1918,7 +1972,7 @@
       ^+  ap-state
       ::
       =.  incoming.subscribers.sat
-        (~(put by incoming.subscribers.sat) ost [attributed-to.cuff.pry pax])
+        (~(put by incoming.subscribers.sat) ost [attributing.routes.pry pax])
       ::
       =^  maybe-arm  ap-state  (ap-find %peer pax)
       ::
@@ -2065,7 +2119,7 @@
       ::
       ?-  -.cuft
         %coup  (ap-take %coup +.path (some !>(p.cuft)))
-        %diff  (ap-diff attributed-to.cuff.pry path p.cuft)
+        %diff  (ap-diff attributing.routes.pry path p.cuft)
         %quit  (ap-take %quit +.path ~)
         %reap  (ap-take %reap +.path (some !>(p.cuft)))
         %http-response  !!
@@ -2415,11 +2469,11 @@
     =*  him  p.q.hic
     ::
     ?:  ?=(%ge i.q.q.hic)
-      =/  mes  ;;((pair @ud rook) r.q.hic)
+      =/  mes  ;;((pair @ud forward-ames) r.q.hic)
       =<  mo-abet
       (mo-gawk:initialised him dap mes)
     ::
-    =/  mes  ;;((pair @ud roon) r.q.hic)
+    =/  mes  ;;((pair @ud reverse-ames) r.q.hic)
     =<  mo-abet
     (mo-gawd:initialised him dap mes)
       ::
@@ -2427,7 +2481,7 @@
       ::
     =/  =mass
       :+  %gall  %.n
-      :~  foreign+&+foreign.ship-state.gall
+      :~  foreign+&+contacts.ship-state.gall
           :+  %blocked  %.n
           (sort ~(tap by (~(run by waiting.ship-state.gall) |=(blocked [%.y +<]))) aor)
           :+  %active   %.n
