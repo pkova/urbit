@@ -1171,7 +1171,12 @@
       ::
       ?^  maybe-bone
         =/  bone  u.maybe-bone
-        ap-state(dap dude, pry privilege, sat agent, ost bone)
+        %_  ap-state
+          dap  dude
+          pry  privilege
+          sat  agent
+          ost  bone
+        ==
       ::
       =/  =opaque-ducts
         =/  bone  +(bone.ducts.agent)
@@ -2607,8 +2612,8 @@
       ~&  [%gall-not-ours ship]
       [~ gall-payload]
     ::
-    =/  booted  (mo-boot:initialised q.dock q.q.hic)
-    mo-abet:booted
+    =>  (mo-boot:initialised q.dock q.q.hic)
+    mo-abet
       ::
       %deal
       ::
