@@ -489,8 +489,7 @@
         ducts           opaque-ducts
       ==
     ::
-    =/  running
-      (~(put by running.ship-state.gall) dude agent)
+    =/  running  (~(put by running.ship-state.gall) dude agent)
     ::
     %_  mo-state
       running.ship-state.gall  running
