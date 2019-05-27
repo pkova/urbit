@@ -392,6 +392,7 @@
   :: +mo-contains-valid-bowl: check that a vase contains a valid bowl.
   ::
   ++  mo-contains-valid-bowl
+    ~/  %mo-contains-valid-bowl
     |=  =vase
     ^-  ?
     ::
@@ -406,6 +407,7 @@
   ::  +mo-receive-core: receives an app core built by %ford.
   ::
   ++  mo-receive-core
+    ~/  %mo-receive-core
     |=  [=dude =beak =made-result:ford]
     ^+  mo-state
     ::
@@ -497,6 +499,7 @@
   :: +mo-handle-foreign-request: handle a foreign request.
   ::
   ++  mo-handle-foreign-request
+    ~/  %mo-handle-foreign-request
     |=  [=ship =internal-task]
     ^+  mo-state
     ::
@@ -851,6 +854,7 @@
   ::  +mo-handle-sys: handle incoming on /sys.
   ::
   ++  mo-handle-sys
+    ~/  %mo-handle-sys
     |=  [=path =sign-arvo]
     ^+  mo-state
     ::
@@ -867,6 +871,7 @@
   ::  +mo-handle-use: handle incoming on /use.
   ::
   ++  mo-handle-use
+    ~/  %mo-handle-use
     |=  [=path hin=(hypo sign-arvo)]
     ^+  mo-state
     ::
@@ -979,6 +984,7 @@
   ::    Simply calls to +ap-peek, which is not accessible from outside of +mo.
   ::
   ++  mo-peek
+    ~/  %mo-peek
     |=  [=dude =privilege =term =path]
     ^-  (unit (unit cage))
     ::
@@ -1154,6 +1160,7 @@
     ::  +ap-abed: initialise the provided app with the supplied privilege.
     ::
     ++  ap-abed
+      ~/  %ap-abed
       |=  [=dude =privilege]
       ^+  ap-state
       ::
@@ -1251,6 +1258,7 @@
     ::  +ap-from-internal: internal move to move.
     ::
     ++  ap-from-internal
+      ~/  %ap-from-internal
       |=  =internal-move
       ^-  move
       ::
@@ -1323,6 +1331,7 @@
     ::  +ap-call: call into server.
     ::
     ++  ap-call
+      ~/  %ap-call
       |=  [=term =vase]
       ^-  [(unit tang) _ap-state]
       ::
@@ -1341,6 +1350,7 @@
     ::  +ap-peek: peek.
     ::
     ++  ap-peek
+      ~/  %ap-peek
       |=  [=term tyl=path]
       ^-  (unit (unit cage))
       ::
@@ -1445,6 +1455,7 @@
     ::  +ap-diff: pour a diff.
     ::
     ++  ap-diff
+      ~/  %ap-diff
       |=  [=ship =path =cage]
       ^+  ap-state
       ::
@@ -1493,6 +1504,7 @@
     ::  +ap-update-subscription: update subscription.
     ::
     ++  ap-update-subscription
+      ~/  %ap-update-subscription
       |=  [is-ok=? =ship =path]
       ^+  ap-state
       ::
@@ -1535,6 +1547,7 @@
     ::  +ap-produce-arm: produce arm.
     ::
     ++  ap-produce-arm
+      ~/  %ap-produce-arm
       |=  =term
       ^-  [(each vase tang) _ap-state]
       ::
@@ -1602,6 +1615,7 @@
     ::  +ap-find-arm: general arm.
     ::
     ++  ap-find-arm
+      ~/  %ap-find-arm
       |=  [=term =path]
       ^-  [(unit (pair @ud @tas)) _ap-state]
       ::
@@ -1636,6 +1650,7 @@
     ::  +ap-exists-arm: check for arm.
     ::
     ++  ap-exists-arm
+      ~/  %ap-exists-arm
       |=  =term
       ^-  ?
       ::
@@ -1681,6 +1696,7 @@
     ::  +ap-move: process each move.
     ::
     ++  ap-move
+      ~/  %ap-move
       |=  =vase
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1723,6 +1739,7 @@
     ::  +ap-move-quit: give quit move.
     ::
     ++  ap-move-quit
+      ~/  %quit
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1749,6 +1766,7 @@
     ::  +ap-move-diff: give diff move.
     ::
     ++  ap-move-diff
+      ~/  %diff
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1788,6 +1806,7 @@
     ::  +ap-move-mess: extract path, target.
     ::
     ++  ap-move-mess
+      ~/  %mess
       |=  =vase
       ^-  [(each (trel path ship term) tang) _ap-state]
       ::
@@ -1816,6 +1835,7 @@
     ::  +ap-move-pass: pass general move.
     ::
     ++  ap-move-pass
+      ~/  %pass
       |=  [=bone =noun =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1857,6 +1877,7 @@
     ::  +ap-move-poke: pass %poke.
     ::
     ++  ap-move-poke
+      ~/  %poke
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1891,6 +1912,7 @@
     ::  +ap-move-peel: pass %peel.
     ::
     ++  ap-move-peel
+      ~/  %peel
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1939,6 +1961,7 @@
     ::  +ap-move-peer: pass %peer.
     ::
     ++  ap-move-peer
+      ~/  %peer
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -1977,6 +2000,7 @@
     ::  +ap-move-pull: pass %pull.
     ::
     ++  ap-move-pull
+      ~/  %pull
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -2004,6 +2028,7 @@
     ::  +ap-move-send: pass gall action.
     ::
     ++  ap-move-send
+      ~/  %send
       |=  [=bone =vase]
       ^-  [(each internal-move tang) _ap-state]
       ::
@@ -2077,6 +2102,7 @@
     ::  +ap-reinstall: reinstall.
     ::
     ++  ap-reinstall
+      ~/  %ap-reinstall
       |=  =vase
       ^+  ap-state
       ::
@@ -2104,6 +2130,7 @@
     ::  +ap-peer: apply %peer.
     ::
     ++  ap-peer
+      ~/  %ap-peer
       |=  pax=path
       ^+  ap-state
       ::
@@ -2137,6 +2164,7 @@
     ::  +ap-poke: apply %poke.
     ::
     ++  ap-poke
+      ~/  %ap-poke
       |=  =cage
       ^+  ap-state
       ::
@@ -2198,6 +2226,7 @@
     ::  +ap-generic-take: generic take.
     ::
     ++  ap-generic-take
+      ~/  %ap-generic-take
       |=  [=path =vase]
       ^+  ap-state
       ::
@@ -2228,6 +2257,7 @@
     ::  +ap-unwrap-take: unwrap take.
     ::
     ++  ap-unwrap-take
+      ~/  %ap-unwrap-take
       |=  [=term pax=path =cage]
       ^+  ap-state
       ::
@@ -2303,6 +2333,7 @@
     ::  +ap-prep: low-level install.
     ::
     ++  ap-prep
+      ~/  %ap-prep
       |=  maybe-vase=(unit vase)
       ^-  [(unit tang) _ap-state]
       ::
@@ -2383,6 +2414,7 @@
     ::  +ap-non-diff-take: non-diff gall take.
     ::
     ++  ap-non-diff-take
+      ~/  %ap-non-diff-take
       |=  [=term =path maybe-vase=(unit vase)]
       ^+  ap-state
       ::
@@ -2407,6 +2439,7 @@
     ::  +ap-safe: process move list.
     ::
     ++  ap-safe
+      ~/  %ap-safe
       |=  =vase
       ^-  [(each (list internal-move) tang) _ap-state]
       ::
@@ -2438,6 +2471,7 @@
     ::  +ap-handle-result: handle result.
     ::
     ++  ap-handle-result
+      ~/  %ap-handle-result
       |=  =vase
       ^-  [(unit tang) _ap-state]
       ::
@@ -2472,6 +2506,7 @@
     ::  +ap-verify-core: verify core.
     ::
     ++  ap-verify-core
+      ~/  %ap-verify-core
       |=  vax=vase
       ^-  [(each vase tang) _ap-state]
       ::
@@ -2491,6 +2526,7 @@
     ::  +ap-slam: virtual slam.
     ::
     ++  ap-slam
+      ~/  %ap-slam
       |=  [=term gat=vase arg=vase]
       ^-  [(each vase tang) _ap-state]
       ::
@@ -2706,6 +2742,7 @@
 ::  +scry: standard scry.
 ::
 ++  scry
+  ~/  %gall-scry
   |=  [fur=(unit (set monk)) =term =shop =desk =coin =path]
   ^-  (unit (unit cage))
   ?.  ?=(%.y -.shop)
@@ -2745,6 +2782,7 @@
 ::  +take: response.
 ::
 ++  take
+  ~/  %gall-take
   |=  [=wire =duct hin=(hypo sign-arvo)]
   ^-  [(list move) _gall-payload]
   ::
