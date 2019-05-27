@@ -233,7 +233,7 @@
       cache=worm
       :: ap-find-arm cache
       ::
-      find-cache=(map [term path] (unit (pair @ud term)))
+      arm-cache=(map [term path] (unit (pair @ud term)))
       :: control duct
       ::
       control-duct=duct
@@ -454,8 +454,7 @@
       =/  =routes  [disclosing=~ attributing=our]
       =/  =privilege  [%high routes]
       =/  initialised  (ap-abed:ap dude privilege)
-      :: NB (jtobin):  check this is fine; was ap-prep
-      (ap-install:initialised ~)
+      (ap-prep:initialised ~)
     ::
     =/  maybe-tang  -.wag
     =/  new  +.wag
@@ -1255,13 +1254,14 @@
       |=  =internal-move
       ^-  move
       ::
+      ~|  [%gall-from-internal-failed internal-move]
+      ::
       =/  =duct  (~(got by duct-map.ducts.sat) bone.internal-move)
+      ::
       =/  card
         ?-    -.move.internal-move
             ::
             %slip  !!
-            ::
-            %sick  !!
             ::
             %give
             ::
@@ -1605,7 +1605,8 @@
       |=  [=term =path]
       ^-  [(unit (pair @ud @tas)) _ap-state]
       ::
-      =/  maybe-cached  (~(get by find-cache.sat) [term path])
+      ::
+      =/  maybe-cached  (~(get by arm-cache.sat) [term path])
       ?^  maybe-cached
         [u.maybe-cached ap-state]
       ::
@@ -1613,19 +1614,22 @@
         =/  dep  0
         |-  ^-  (unit (pair @ud @tas))
         =/  spu
+          ~&  [%spu-branching-on path]
           ?~  path
             ~
           =/  hyped  (cat 3 term (cat 3 '-' i.path))
           $(path t.path, dep +(dep), term hyped)
         ::
+        ~&  [%spu-is spu]
         ?^  spu
           spu
         ::
         ?.  (ap-exists-arm term)
+          ~&  [%no-such-arm term]
           ~
         (some [dep term])
       ::
-      =.  find-cache.sat  (~(put by find-cache.sat) [term path] result)
+      =.  arm-cache.sat  (~(put by arm-cache.sat) [term path] result)
       ::
       [result ap-state]
     ::
@@ -2291,7 +2295,7 @@
         %=  ap-state
           misvale.sat     new-misvale-data
           dub             new-dub
-          find-cache.sat  ~
+          arm-cache.sat   ~
         ==
       ::
       [maybe-tang next]
@@ -2597,34 +2601,41 @@
   |=  [=duct hic=(hypo (hobo task:able))]
   ^-  [(list move) _gall-payload]
   ::
-  =>  .(q.hic ?.(?=(%soft -.q.hic) q.hic ;;(task:able p.q.hic)))
+  ~|  [%gall-call-failed duct q.hic]
+  ::
+  ::  make sure our task is hard
+  =/  =task:able
+    ?.  ?=(%soft -.q.hic)
+      q.hic
+    ;;  task:able  p.q.hic
   ::
   =/  initialised  (mo-abed:mo duct)
   ::
-  ?-    -.q.hic
+  ?-    -.task
       ::
       %conf
       ::
-    =/  =dock  p.q.hic
+    =/  =dock  p.task
     =/  =ship  p.dock
     ?.  =(our ship)
       ~&  [%gall-not-ours ship]
       [~ gall-payload]
     ::
-    =>  (mo-boot:initialised q.dock q.q.hic)
+    =>  (mo-boot:initialised q.dock q.task)
     mo-abet
       ::
       %deal
       ::
-    =<  mo-abet
-    :: either to us
+    =/  =sock  p.task
+    =/  =internal-task  q.task
     ::
-    ?.  =(our q.p.q.hic)
-      :: or from us
-      ::
-      ?>  =(our p.p.q.hic)
-      (mo-handle-foreign-request:initialised q.p.q.hic q.q.hic)
-    (mo-handle-local:initialised p.p.q.hic q.q.hic)
+    ?.  =(q.sock our)
+      ?>  =(p.sock our)
+      =>  (mo-handle-foreign-request:initialised q.sock internal-task)
+      mo-abet
+    ::
+    =>  (mo-handle-local:initialised p.sock internal-task)
+    mo-abet
       ::
       %init
       ::
@@ -2641,17 +2652,20 @@
       ::
       %west
       ::
-    ?>  ?=([?(%ge %gh) @ ~] q.q.hic)
-    =/  dap  i.t.q.q.hic
-    =/  him  p.q.hic
+    =/  =ship  p.task
+    =/  =path  q.task
+    =/  =noun  r.task
     ::
-    ?:  ?=(%ge i.q.q.hic)
-      =/  mes  ;;((pair @ud forward-ames) r.q.hic)
-      =>  (mo-handle-forward:initialised him dap mes)
+    ?>  ?=([?(%ge %gh) @ ~] path)
+    =/  dap  i.t.path
+    ::
+    ?:  ?=(%ge i.path)
+      =/  mes  ;;((pair @ud forward-ames) noun)
+      =>  (mo-handle-forward:initialised ship dap mes)
       mo-abet
     ::
-    =/  mes  ;;((pair @ud reverse-ames) r.q.hic)
-    =>  (mo-handle-backward:initialised him dap mes)
+    =/  mes  ;;((pair @ud reverse-ames) noun)
+    =>  (mo-handle-backward:initialised ship dap mes)
     mo-abet
       ::
       %wegh
@@ -2734,7 +2748,7 @@
   |=  [=wire =duct hin=(hypo sign-arvo)]
   ^-  [(list move) _gall-payload]
   ::
-  ~|  [%gall-take wire]
+  ~|  [%gall-take-failed wire]
   ::
   ?>  ?=([?(%sys %use) *] wire)
   ::
