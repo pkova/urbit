@@ -198,9 +198,9 @@
       duct-map=(map @ud duct)
   ==
 ::
-::  +opaque-ducts: opaque input.
+::  +ducts: opaque input.
 ::
-++  opaque-ducts
+++  ducts
   $:
       :: bone sequence
       ::
@@ -260,7 +260,7 @@
       required-trans=(map bone mark)
       :: opaque ducts
       ::
-      ducts=opaque-ducts
+      ducts=ducts
   ==
 ::
 :: +blocked: blocked tasks.
@@ -450,7 +450,6 @@
       =/  err  [[%leaf "{<term>}: bogus core"] ~]
       (mo-give %onto %.n err)
     ::
-    ::  FIXME worth checking that this is assigning things correctly
     =.  mo-state  (mo-new-agent term beak result-vase)
     ::
     =/  old  mo-state
@@ -481,11 +480,12 @@
   ::
   ::  +mo-new-agent: create a new agent and add it to state.
   ::
+  ::  FIXME add some printfs to check and see if this is working alright
   ++  mo-new-agent
     |=  [=term =beak =vase]
     ^+  mo-state
     ::
-    =/  =opaque-ducts
+    =/  =ducts
       :+  bone=1
         bone-map=[[[~ ~] 0] ~ ~]
        duct-map=[[0 [~ ~]] ~ ~]
@@ -496,7 +496,7 @@
         control-duct    hen
         beak            beak
         running-state   vase
-        ducts           opaque-ducts
+        ducts           ducts
       ==
     ::
     =/  running  (~(put by running.ship-state.gall) term agent)
@@ -939,12 +939,16 @@
     |=  =term
     ^+  mo-state
     ::
+    ~&  [%mo-clearing-queue-for term]
+    ::
     ?.  (~(has by running.ship-state.gall) term)
+      ~&  %mo-nothing-running
       mo-state
     ::
     =/  maybe-blocked  (~(get by waiting.ship-state.gall) term)
     ::
     ?~  maybe-blocked
+      ~&  %mo-nothing-blocked
       mo-state
     ::
     =/  =blocked  u.maybe-blocked
@@ -958,6 +962,7 @@
       ==
     ::
     =^  task  blocked  [p q]:~(get to blocked)
+    ~&  [%mo-found-task task]
     ::
     =/  =duct  p.task
     =/  =privilege  q.task
@@ -969,6 +974,7 @@
       =/  card  [%slip %g %deal sock internal-task]
       [duct card]
     ::
+    ~&  [%mo-prepending-move move]
     $(moves [move moves])
   ::
   ::  +mo-beak: assemble a beak for the provided app.
@@ -1192,7 +1198,7 @@
         ==
       ::
       :: FIXME check
-      =/  =opaque-ducts
+      =/  =ducts
         =/  bone  +(bone.ducts.agent)
         :+  bone=bone
           bone-map=(~(put by bone-map.ducts.agent) hen bone)
@@ -1200,7 +1206,7 @@
       ::
       %=  ap-state
         ost        bone.ducts.agent
-        ducts.sat  opaque-ducts
+        ducts.sat  ducts
       ==
     ::
     ::  +ap-abet: resolve moves.
