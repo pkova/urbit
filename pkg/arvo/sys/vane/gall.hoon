@@ -320,6 +320,9 @@
 ::
 ::  +mo: Arvo-level move handling.
 ::
+::  An outer core responsible for routing moves to and from Arvo; it calls
+::  an inner core, +ap, to route internal moves to and from agents.
+::
 ++  mo
   ~%  %gall-mo  +>  ~
   ::
@@ -582,7 +585,7 @@
       %pull  mo-state
     ==
   ::
-  ::  +mo-assign-bone: assign an out bone.
+  ::  +mo-assign-bone: assign an out bone to a ship.
   ::
   ::  If we know about the ship, we simply use its existing bone.  Otherwise
   ::  we register a new entry for the ship, and use a default bone.
@@ -616,6 +619,7 @@
   ::
   ::  +mo-retrieve-duct: retrieve a duct by index.
   ::
+  ::  FIXME index vs bone
   ++  mo-retrieve-duct
     |=  [=ship index=@ud]
     ^-  duct
@@ -646,7 +650,9 @@
   ::
   ::  +mo-handle-sys-pel: translated peer.
   ::
-  ::  FIXME better name, docs
+  ::  Expects an appropriate +sign from %ford and simply gives its payload.
+  ::
+  ::  FIXME better name
   ::
   ++  mo-handle-sys-pel
     |=  [=path =sign-arvo]
@@ -670,7 +676,13 @@
   ::
   ::  +mo-handle-sys-red: diff ack.
   ::
-  ::  FIXME better name, docs
+  ::  Expects an appropriate +sign from %ames.  If the +sign doesn't wrap
+  ::  any errors, then it simply passes a %pump acknowledgement internally;
+  ::  otherwise it passes both an internal unsubscribing %pull, plus a %want to
+  ::  %ames, before complaining about a bad message acknowledgment.
+  ::
+  ::  FIXME better name
+  ::
   ++  mo-handle-sys-red
     |=  [=path =sign-arvo]
     ^+  mo-state
@@ -694,15 +706,15 @@
     ?~  coop
       =/  =note-arvo
         =/  =sock  [him our]
-        =/  =cush  [dap %pump ~]
-        =/  =task:able  [%deal sock cush]
+        =/  =internal-task  [dap %pump ~]
+        =/  =task:able  [%deal sock internal-task]
         [%g task]
       (mo-pass sys-path note-arvo)
     ::
     =/  gall-move=note-arvo
       =/  =sock  [him our]
-      =/  =cush  [dap %pull ~]
-      =/  =task:able  [%deal sock cush]
+      =/  =internal-task  [dap %pull ~]
+      =/  =task:able  [%deal sock internal-task]
       [%g task]
     ::
     =/  ames-move=note-arvo
@@ -724,7 +736,11 @@
   ::
   ::  +mo-handle-sys-rep: reverse request.
   ::
+  ::  On receipt of a valid +sign from %ford, sets state to the appropriate
+  ::  duct and gives an internal %diff containing the +sign payload.
+  ::
   ::  FIXME better name, docs
+  ::
   ++  mo-handle-sys-rep
     |=  [=path =sign-arvo]
     ^+  mo-state
@@ -761,7 +777,14 @@
   ::
   ::  +mo-handle-sys-req: inbound request.
   ::
-  ::  FIXME better name, docs
+  ::  On receipt of an appropriate +sign from %ford, applies an action to the
+  ::  specified agent.
+  ::
+  ::  On receipt of an appropriate internal +gift, applies the appropriate
+  ::  action.
+  ::
+  ::  FIXME better name, docs; in particular seek to go higher level w/docs
+  ::
   ++  mo-handle-sys-req
     |=  [=path =sign-arvo]
     ^+  mo-state
@@ -829,7 +852,11 @@
   ::
   ::  +mo-handle-sys-val: inbound validate.
   ::
-  ::  FIXME better name, docs
+  ::  Validates an incoming +sign from %ford and applies it to the specified
+  ::  agent.
+  ::
+  ::  FIXME better name
+  ::
   ++  mo-handle-sys-val
     |=  [=path =sign-arvo]
     ^+  mo-state
@@ -869,13 +896,13 @@
     ?>  ?=([@ @ ~] path)
     ::
     =/  =foreign-response  (foreign-response i.t.path)
-    =/  art  +>+.sign-arvo
+    =/  maybe-ares  +>+.sign-arvo
     ::
-    (mo-handle-foreign-response foreign-response art)
+    (mo-handle-foreign-response foreign-response maybe-ares)
   ::
   ::  +mo-handle-sys: handle a +sign incoming over /sys.
   ::
-  ::  FIXME better docs, potentially +mo-handle-sign
+  ::  FIXME better docs, potentially rename +mo-handle-sign or something
   ++  mo-handle-sys
     ~/  %mo-handle-sys
     |=  [=path =sign-arvo]
@@ -891,9 +918,12 @@
       %way   (mo-handle-sys-way path sign-arvo)
     ==
   ::
-  ::  +mo-handle-use: handle incoming on /use.
+  ::  +mo-handle-use: handle a typed +sign incoming on /use.
   ::
-  ::  FIXME better docs, possibly better name.  what's up with hin vs sign here
+  ::  Initialises the specified agent and then performs an agent-level +take on
+  ::  the supplied +sign.
+  ::
+  ::  FIXME better name.
   ++  mo-handle-use
     ~/  %mo-handle-use
     |=  [=path hin=(hypo sign-arvo)]
@@ -989,9 +1019,8 @@
     ::
     $(moves [move moves])
   ::
-  ::  +mo-beak: assemble a beak for the specified app.
+  ::  +mo-beak: assemble a beak for the specified agent.
   ::
-  ::  FIXME why is it safe to use 'got' below?
   ++  mo-beak
     |=  =term
     ^-  beak
@@ -1016,7 +1045,7 @@
     =/  app  (ap-abed:ap agent privilege)
     (ap-peek:app term path)
   ::
-  ::  +mo-apply: apply the supplied agent action.
+  ::  +mo-apply: apply the supplied action to the specified agent.
   ::
   ++  mo-apply
     |=  [=term =privilege =agent-action]
@@ -1050,7 +1079,10 @@
   ::
   ::  +mo-handle-local: handle locally.
   ::
-  ::  FIXME docs
+  ::  If the agent is running or waiting, update it with the supplied +task
+  ::  and mark it as waiting.  Otherwise simply apply the action to the agent.
+  ::
+  ::  FIXME higher-level docs
   ++  mo-handle-local
     |=  [=ship =internal-task]
     ^+  mo-state
@@ -1073,10 +1105,8 @@
         =/  task  [hen privilege agent-action]
         (~(put to tasks) task)
       ::
-      =/  waiting  (~(put by waiting.agents.gall) term blocked)
-      ::
       %_  mo-state
-        waiting.agents.gall  waiting
+        waiting.agents.gall  (~(put by waiting.agents.gall) term blocked)
       ==
     ::
     (mo-apply term privilege agent-action)
@@ -1175,6 +1205,7 @@
   ++  ap
     ~%  %gall-ap  +>  ~
     ::
+    ::  FIXME i'd like to see this state refactored
     |_  $:  agent-name=term
             agent-privilege=privilege
             agent-bone=bone
@@ -1185,15 +1216,15 @@
     ::
     ++  ap-state  .
     ::
-    ::  +ap-abed: initialise +ap-state for the specified agent, with the
+    ::  +ap-abed: initialise state for the specified agent, with the
     ::  supplied privilege.
     ::
     ::  The agent must already be running in +gall -- here we simply update
-    ::  +ap-state to focus on it.
+    ::  state to focus on it.
     ::
     ::  If the agent doesn't have a bone corresponding to the +mo control duct,
     ::  we give it one, and update its bone- and duct-indexed correspondence
-    ::  maps in turn.  +ap-state also tracks the agent's bone under the
+    ::  maps in turn.  The agent's bone is also tracked in state under the
     ::  agent-bone face.
     ::
     ++  ap-abed
@@ -1245,7 +1276,7 @@
       ::
       %_  mo-state
         running.agents.gall  running
-        moves              moves
+        moves                moves
       ==
     ::
     ::  +ap-track-queue: track queue.
@@ -1255,7 +1286,7 @@
     ::  are routed by bone instead of duct.
     ::
     ::  If there are any currently-associated non-%give internal moves, we
-    ::  enqueuing each along its associated bone.
+    ::  enqueue each along its associated bone.
     ::
     ::  When we've finished enqueuing them,
     ::
@@ -1274,8 +1305,7 @@
           $(internal-moves t.internal-moves)
         ::
         =/  =internal-move  i.internal-moves
-        :: FIXME this is very weird -- why do we shift the focused bone, instead
-        :: of passing it explicitly?
+        ::
         =^  filled  ap-state  ap-enqueue(agent-bone bone.internal-move)
         ::
         =/  new-bones
@@ -1285,23 +1315,22 @@
         ::
         $(internal-moves t.internal-moves, bones new-bones)
       ::
-      :: FIXME rename to bones
-      =/  boned  ~(tap in bones)
+      =/  bones  ~(tap in bones)
       ::
       |-  ^+  ap-state
       ::
-      ?~  boned
+      ?~  bones
         ap-state
       ::
-      =>  $(boned t.boned, agent-bone i.boned)
+      =>  $(bones t.bones, agent-bone i.bones)
       ::
-      =/  tib  (~(get by incoming.subscribers.sat) agent-bone)
+      =/  incoming  (~(get by incoming.subscribers.sat) agent-bone)
       ::
-      ?~  tib
+      ?~  incoming
         ~&  [%ap-track-queue-bad-bone agent-name agent-bone]
         ap-state
       ::
-      =/  =ship  p.u.tib
+      =/  =ship  p.u.incoming
       ap-kill(attributing.routes.agent-privilege ship)
     ::
     ::  +ap-from-internal: internal move to move.
@@ -1382,6 +1411,8 @@
     ::
     ::  +ap-call: call into server.
     ::
+    ::  FIXME docs
+    ::
     ++  ap-call
       ~/  %ap-call
       |=  [=term =vase]
@@ -1401,6 +1432,8 @@
     ::
     ::  +ap-peek: peek.
     ::
+    ::  FIXME docs
+    ::
     ++  ap-peek
       ~/  %ap-peek
       |=  [=term tyl=path]
@@ -1411,7 +1444,6 @@
           [mark=%$ tyl=tyl]
         ::
         =/  =path  (flop tyl)
-        ::
         ?>  ?=(^ path)
         [mark=i.path tyl=(flop t.path)]
       ::
@@ -1508,6 +1540,7 @@
     ::
     ::  +ap-diff: pour a diff.
     ::
+    ::  FIXME docs
     ++  ap-diff
       ~/  %ap-diff
       |=  [=ship =path =cage]
@@ -1557,6 +1590,8 @@
     ::
     ::  +ap-update-subscription: update subscription.
     ::
+    ::  FIXME docs
+    ::
     ++  ap-update-subscription
       ~/  %ap-update-subscription
       |=  [is-ok=? =ship =path]
@@ -1574,6 +1609,9 @@
     ::
     ::  +ap-dequeue: drop from queue.
     ::
+    ::  Dequeues along the current bone, deleting the queue entirely if it
+    ::  drops to zero.
+    ::
     ++  ap-dequeue
       ^+  ap-state
       ::
@@ -1589,17 +1627,14 @@
       ::
       ?:  =(0 u.level)
         =/  deleted  (~(del by meter.subscribers.sat) agent-bone)
-        %_  ap-state
-          meter.subscribers.sat  deleted
-        ==
+        ap-state(meter.subscribers.sat deleted)
       ::
-      =/  dropped  (~(put by meter.subscribers.sat) agent-bone u.level)
-      %_  ap-state
-        meter.subscribers.sat  dropped
-      ==
+      =/  dequeued  (~(put by meter.subscribers.sat) agent-bone u.level)
+      ap-state(meter.subscribers.sat dequeued)
     ::
     ::  +ap-produce-arm: produce arm.
     ::
+    ::  FIXME docs
     ++  ap-produce-arm
       ~/  %ap-produce-arm
       |=  =term
@@ -1629,9 +1664,7 @@
       ::
       =/  next
         =/  =worm  +>.virtual
-        %_  ap-state
-          cache.sat  worm
-        ==
+        ap-state(cache.sat worm)
       ::
       [possibly-vase next]
     ::
@@ -1645,8 +1678,6 @@
     ::
     ::  Returns a yes if the meter has been incremented, and no otherwise.
     ::
-    :: FIXME why is 'got' safe below?
-    :: FIXME would 'bump meter' be better?
     ++  ap-enqueue
       ^-  [? _ap-state]
       ::
@@ -1675,6 +1706,10 @@
     ::
     ::  +ap-find-arm: general arm.
     ::
+    ::  If the arm exists in the running cache for the raw [term path] cell,
+    ::  returns that.  Otherwise we assemble
+    ::
+    ::  FIXME finish
     ++  ap-find-arm
       ~/  %ap-find-arm
       |=  [=term =path]
@@ -1704,7 +1739,7 @@
       ::
       [result ap-state]
     ::
-    ::  +ap-exists-arm: check for arm.
+    ::  +ap-exists-arm: check for an arm in the running agent state.
     ::
     ++  ap-exists-arm
       ~/  %ap-exists-arm
@@ -2557,7 +2592,7 @@
       ::
       =/  next
         %_  ap-state
-          agent-moves                (weld (flop internal-moves) agent-moves)
+          agent-moves        (weld (flop internal-moves) agent-moves)
           running-state.sat  p.possibly-vase
         ==
       ::
