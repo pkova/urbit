@@ -406,7 +406,7 @@
     =/  =type  p.u.maybe-vase
     (~(nest ut type) %.n inferred)
   ::
-  ::  +mo-handle-received-core: receives an app core built by %ford.
+  ::  +mo-receive-core: receives an app core built by %ford.
   ::
   ::  Presuming we receive a good core, we first check to see if the agent
   ::  is already running.  If so, we update its beak in %gall's state,
@@ -418,8 +418,8 @@
   ::  and then do more or less the same procedure as we did for the running
   ::  agent case.
   ::
-  ++  mo-handle-received-core
-    ~/  %mo-handle-received-core
+  ++  mo-receive-core
+    ~/  %mo-receive-core
     |=  [=term =beak =made-result:ford]
     ^+  mo-state
     ::
@@ -626,7 +626,6 @@
   ::
   ::  +mo-handle-sys: handle a +sign incoming over /sys.
   ::
-  ::  FIXME better docs, potentially rename +mo-handle-sign or something
   ++  mo-handle-sys
     ~/  %mo-handle-sys
     |=  [=path =sign-arvo]
@@ -659,7 +658,7 @@
       =/  =case  [%da (slav %da i.t.t.beak-path)]
       [ship desk case]
     ::
-    (mo-handle-received-core i.t.path beak result.sign-arvo)
+    (mo-receive-core i.t.path beak result.sign-arvo)
   ::
   ::  +mo-handle-sys-pel: translated peer.
   ::
