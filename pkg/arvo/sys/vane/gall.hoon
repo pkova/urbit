@@ -624,6 +624,24 @@
     =/  =foreign  (~(got by contacts.agents.gall) ship)
     (~(got by duct-map.foreign) index)
   ::
+  ::  +mo-handle-sys: handle a +sign incoming over /sys.
+  ::
+  ::  FIXME better docs, potentially rename +mo-handle-sign or something
+  ++  mo-handle-sys
+    ~/  %mo-handle-sys
+    |=  [=path =sign-arvo]
+    ^+  mo-state
+    ::
+    ?+  -.path  !!
+      %core  (mo-handle-sys-core path sign-arvo)
+      %pel   (mo-handle-sys-pel path sign-arvo)
+      %red   (mo-handle-sys-red path sign-arvo)
+      %rep   (mo-handle-sys-rep path sign-arvo)
+      %req   (mo-handle-sys-req path sign-arvo)
+      %val   (mo-handle-sys-val path sign-arvo)
+      %way   (mo-handle-sys-way path sign-arvo)
+    ==
+  ::
   ::  +mo-handle-sys-core: receive a core from %ford.
   ::
   ++  mo-handle-sys-core
@@ -894,24 +912,6 @@
     =/  maybe-ares  +>+.sign-arvo
     ::
     (mo-handle-foreign-response foreign-response maybe-ares)
-  ::
-  ::  +mo-handle-sys: handle a +sign incoming over /sys.
-  ::
-  ::  FIXME better docs, potentially rename +mo-handle-sign or something
-  ++  mo-handle-sys
-    ~/  %mo-handle-sys
-    |=  [=path =sign-arvo]
-    ^+  mo-state
-    ::
-    ?+  -.path  !!
-      %core  (mo-handle-sys-core path sign-arvo)
-      %pel   (mo-handle-sys-pel path sign-arvo)
-      %red   (mo-handle-sys-red path sign-arvo)
-      %rep   (mo-handle-sys-rep path sign-arvo)
-      %req   (mo-handle-sys-req path sign-arvo)
-      %val   (mo-handle-sys-val path sign-arvo)
-      %way   (mo-handle-sys-way path sign-arvo)
-    ==
   ::
   ::  +mo-handle-use: handle a typed +sign incoming on /use.
   ::
