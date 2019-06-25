@@ -156,8 +156,7 @@
       running=(map term agent)
       ::  waiting queue
       ::
-      ::  FIXME rename to blocked
-      waiting=(map term blocked)
+      blocked=(map term blocked)
   ==
 ::
 ::  +routes: new cuff.
@@ -984,7 +983,7 @@
     ?.  (~(has by running.agents.gall) term)
       mo-state
     ::
-    =/  maybe-blocked  (~(get by waiting.agents.gall) term)
+    =/  maybe-blocked  (~(get by blocked.agents.gall) term)
     ::
     ?~  maybe-blocked
       mo-state
@@ -994,9 +993,9 @@
     |-  ^+  mo-state
     ::
     ?:  =(~ blocked)
-      =/  waiting   (~(del by waiting.agents.gall) term)
+      =/  blocked   (~(del by blocked.agents.gall) term)
       %_  mo-state
-        waiting.agents.gall  waiting
+        blocked.agents.gall  blocked
       ==
     ::
     =^  task  blocked  [p q]:~(get to blocked)
@@ -1089,18 +1088,18 @@
     =/  =agent-action  q.internal-task
     ::
     =/  is-running  (~(has by running.agents.gall) term)
-    =/  is-waiting  (~(has by waiting.agents.gall) term)
+    =/  is-blocked  (~(has by blocked.agents.gall) term)
     ::
-    ?:  |(!is-running is-waiting)
+    ?:  |(!is-running is-blocked)
       ::
       =/  =blocked
-        =/  waiting  (~(get by waiting.agents.gall) term)
+        =/  waiting  (~(get by blocked.agents.gall) term)
         =/  tasks  (fall waiting *blocked)
         =/  task  [hen privilege agent-action]
         (~(put to tasks) task)
       ::
       %_  mo-state
-        waiting.agents.gall  (~(put by waiting.agents.gall) term blocked)
+        blocked.agents.gall  (~(put by blocked.agents.gall) term blocked)
       ==
     ::
     (mo-apply term privilege agent-action)
@@ -2796,8 +2795,8 @@
       ::
       %wegh
       ::
-    =/  waiting
-      =/  queued  (~(run by waiting.agents.gall) |=(blocked [%.y +<]))
+    =/  blocked
+      =/  queued  (~(run by blocked.agents.gall) |=(blocked [%.y +<]))
       (sort ~(tap by queued) aor)
     ::
     =/  running
@@ -2807,7 +2806,7 @@
     =/  =mass
       :+  %gall  %.n
       :~  [%foreign %.y contacts.agents.gall]
-          [%blocked %.n waiting]
+          [%blocked %.n blocked]
           [%active %.n running]
           [%dot %.y gall]
       ==
