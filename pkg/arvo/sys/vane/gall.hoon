@@ -406,7 +406,7 @@
     =/  =type  p.u.maybe-vase
     (~(nest ut type) %.n inferred)
   ::
-  ::  +mo-receive-core: receives an app core built by %ford.
+  ::  +mo-handle-received-core: receives an app core built by %ford.
   ::
   ::  Presuming we receive a good core, we first check to see if the agent
   ::  is already running.  If so, we update its beak in %gall's state,
@@ -418,12 +418,8 @@
   ::  and then do more or less the same procedure as we did for the running
   ::  agent case.
   ::
-  ::  FIXME potentially rename this; it's doing a lot more than just receiving
-  ::  the core.  It's basically processing the core that it has received from
-  ::  ford.
-  ::
-  ++  mo-receive-core
-    ~/  %mo-receive-core
+  ++  mo-handle-received-core
+    ~/  %mo-handle-received-core
     |=  [=term =beak =made-result:ford]
     ^+  mo-state
     ::
@@ -511,7 +507,7 @@
   ::
   ::  +mo-handle-foreign-request: handle a foreign request.
   ::
-  ::  FIXME document
+  ::  Handles tasks received on a +call that have come from another ship.
   ::
   ++  mo-handle-foreign-request
     ~/  %mo-handle-foreign-request
@@ -560,7 +556,8 @@
   ::
   ::  +mo-handle-foreign-response: handle foreign response.
   ::
-  ::  FIXME document
+  ::  Handle a received %woot from %ames.
+  ::
   ++  mo-handle-foreign-response
     |=  [=foreign-response art=(unit ares)]
     ^+  mo-state
@@ -588,7 +585,7 @@
   ::  +mo-assign-bone: assign an out bone to a ship.
   ::
   ::  If we know about the ship, we simply use its existing bone.  Otherwise
-  ::  we register a new entry for the ship, and use a default bone.
+  ::  we register a new entry for the ship, and use a default bone for it.
   ::
   ++  mo-assign-bone
     |=  =ship
@@ -629,8 +626,6 @@
   ::
   ::  +mo-handle-sys-core: receive a core from %ford.
   ::
-  ::  FIXME it would be very nice to know anything about the path
-  ::
   ++  mo-handle-sys-core
     |=  [=path =sign-arvo]
     ^+  mo-state
@@ -646,7 +641,7 @@
       =/  =case  [%da (slav %da i.t.t.beak-path)]
       [ship desk case]
     ::
-    (mo-receive-core i.t.path beak result.sign-arvo)
+    (mo-handle-received-core i.t.path beak result.sign-arvo)
   ::
   ::  +mo-handle-sys-pel: translated peer.
   ::
