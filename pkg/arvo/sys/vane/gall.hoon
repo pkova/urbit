@@ -1763,12 +1763,14 @@
       ::
       [[%.y internal-move] ap-state]
     ::
+    ::  +ap-move-http-response
     ::
+    ++  ap-move-http-response
+      |=  [sto=bone vax=vase]
+      ^-  [(each cove tang) _ap-state]
       ::
-      ::  TODO: Magic vase validation. I have no idea how malformed
-      ::  checking works.
-      ::
-      ::  This should be moved into +cote
+      ::  TODO: Magic vase validation. I have no idea how malformed checking
+      ::  works.
       ::
       :_  ap-state
       [%& sto %give %http-response ;;(http-event:http q.vax)]
