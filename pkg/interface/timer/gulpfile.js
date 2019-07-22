@@ -20,7 +20,7 @@ var globals = require('rollup-plugin-node-globals');
   Main config options
 ***/
 
-var urbitrc = require('./.urbitrc');
+var urbitrc = require('../urbitrc');
 
 /***
   End main config options
