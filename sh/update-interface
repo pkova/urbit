@@ -1,0 +1,19 @@
+set -ex
+
+cd pkg/interface/chat
+gulp
+cd ..
+cd launch
+gulp
+cd ..
+cd clock
+gulp
+cd ..
+cd publish
+gulp
+cd ..
+cd weather
+gulp
+cd ../../../
+
+set +x
