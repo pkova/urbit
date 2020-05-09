@@ -6469,8 +6469,16 @@
       ;~  plug
         ;~(pfix (plus whit) name)
         ;~  pose
-          (ifix [;~(plug tis yel) yel] (star ;~(less yel escp)))
-          (ifix [;~(plug tis say) say] (star ;~(less say escp)))
+          %+  ifix
+          :_  yel
+          ;~(plug ;~(pose ;~(plug whit tis) tis) ;~(pose ;~(plug whit yel) yel))
+          (star ;~(less yel escp))
+          ::
+          %+  ifix
+          :_  say
+          ;~(plug ;~(pose ;~(plug whit tis) tis) ;~(pose ;~(plug whit say) say))
+          (star ;~(less say escp))
+          ::
           (easy ~)
         ==
       ==
