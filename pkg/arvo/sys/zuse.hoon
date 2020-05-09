@@ -6468,8 +6468,16 @@
       ;~  plug
         ;~(pfix (plus whit) name)
         ;~  pose
-          (ifix [;~(plug tis yel) yel] (star ;~(less yel escp)))
-          (ifix [;~(plug tis say) say] (star ;~(less say escp)))
+          %+  ifix
+            :_  yel
+            ;~(plug (ifix [. .]:(star whit) tis) yel)
+          (star ;~(less yel escp))
+          ::
+          %+  ifix
+            :_  say
+            ;~(plug (ifix [. .]:(star whit) tis) say)
+          (star ;~(less say escp))          ::
+          ::
           (easy ~)
         ==
       ==
@@ -6484,7 +6492,7 @@
     ::                                                  ::  ++chrd:de-xml:html
     ++  chrd                                            ::  character data
       %+  cook  |=(a/tape ^-(mars ;/(a)))
-      (plus ;~(less yel ;~(pose (just `@`10) escp)))
+      (plus ;~(pose (just `@`10) escp))
     ::                                                  ::  ++comt:de-xml:html
     ++  comt                                            ::  comments
       =-  (ifix [(jest '<!--') (jest '-->')] (star -))
