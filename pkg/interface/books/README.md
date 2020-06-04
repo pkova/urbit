@@ -13,3 +13,5 @@ Books is an application for sharing reading lists. You can import your shelf fro
 `|start %books-import-hook`
 
 `|start %books-view`
+
+https://youtu.be/Spy7FoPdfx8
