@@ -19,6 +19,7 @@
 ::
 +$  versioned-state
     $%  state-0
+        state-1
     ==
 ::  batch-size: how many addresses to send out at once for checking
 ::  last-block: most recent block seen by the store
@@ -39,10 +40,26 @@
       mempool-addresses=(jug address condition)
   ==
 ::
++$  state-1
+  $:  %1
+      prov=(unit provider)
+      walts=(map xpub:bc walt)
+      =btc-state
+      =history
+      curr-xpub=(unit xpub:bc)
+      =scans
+      =params
+      feybs=(map ship sats)
+      =piym
+      =poym
+      ahistorical-txs=(set txid)
+      mempool-addresses=(jug address condition)
+  ==
+::
 +$  card  card:agent:gall
 ::
 --
-=|  state-0
+=|  state-1
 =*  state  -
 %-  agent:dbug
 ^-  agent:gall
@@ -61,13 +78,15 @@
     :-  %launch-action
     !>  :+  %add
       %btc-wallet
-    [[%basic 'Wallet' '/~btc/img/tile.png' '/~btc'] %.y]
+    [[%custom `'/~btc' `'/~btc/img/tile.png'] %.y]
+  =/  warning  [%settings-event !>([%put-entry %btc-wallet %warning %b %.y])]
   :-  :~  [%pass /btc-wallet-server %agent [our.bowl %file-server] %poke file]
           [%pass /btc-wallet-tile %agent [our.bowl %launch] %poke tile]
+          [%pass /warn %agent [our.bowl %settings-store] %poke warning]
       ==
   %_  this
       state
-    :*  %0
+    :*  %1
         ~
         *(map xpub:bc walt)
         *^btc-state
@@ -82,15 +101,56 @@
         ~
     ==
   ==
+::
 ++  on-save
   ^-  vase
   !>(state)
+::
 ++  on-load
   |=  old-state=vase
   ^-  (quip card _this)
   ~&  >  '%btc-wallet recompiled'
-  `this(state !<(versioned-state old-state))
-  ::  `this(state *state-0)
+  =/  ver  !<(versioned-state old-state)
+  =|  cards=(list card)
+  |-
+  ?-  -.ver
+      %1
+    [cards this(state ver)]
+  ::
+      %0
+    =/  add-tile
+      :-  %launch-action
+      !>  :+  %add
+        %btc-wallet
+      [[%custom `'/~btc' `'/~btc/img/tile.png'] %.y]
+    =/  remove-tile
+      [%launch-action !>([%remove %btc-wallet])]
+    =/  warning  [%settings-event !>([%put-entry %btc-wallet %warning %b %.y])]
+    %=  $
+        cards
+      :~  [%pass /btc-wallet-tile %agent [our.bowl %launch] %poke remove-tile]
+          [%pass /btc-wallet-tile %agent [our.bowl %launch] %poke add-tile]
+          [%pass /warn %agent [our.bowl %settings-store] %poke warning]
+      ==
+    ::
+        ver
+      :*  %1
+          prov.ver
+          walts.ver
+          btc-state.ver
+          history.ver
+          curr-xpub.ver
+          scans.ver
+          params.ver
+          feybs.ver
+          piym.ver
+          poym.ver
+          ahistorical-txs.ver
+          ~
+      ==
+    ==
+  ==
+::
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
@@ -752,7 +812,7 @@
     (handle-address-info address.p.upd utxos.p.upd used.p.upd)
     ::
       %tx-info
-    =/  [cards=(list card) sty=state-0]
+    =/  [cards=(list card) sty=state-1]
       (handle-tx-info info.p.upd)
     :_  sty
     [(poke-internal [%close-pym info.p.upd]) cards]
@@ -785,7 +845,6 @@
       %+  turn  (weld inputs.ti outputs.ti)
       |=(=val:tx address.val)
     is-our-address
-  ~&  addresses+our-addrs
   =/  addr-info-cards=(list card)
     %+  turn  ~(tap in our-addrs)
     |=  a=address

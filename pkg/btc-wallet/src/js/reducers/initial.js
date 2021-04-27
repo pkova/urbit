@@ -12,7 +12,11 @@ export class InitialReducer {
       state.btcState = data['btc-state'];
       state.history = this.reduceHistory(data.history);
       state.address = data.address;
-      state.loaded = true;
+
+      state.loadedBtc = true;
+      if (state.loadedSettings) {
+        state.loaded = true;
+      }
     }
   }
 
