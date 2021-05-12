@@ -332,7 +332,7 @@
       [u.uw eny.bowl block.btc-state ~ feyb.comm ~[[address.comm value.comm ~]]]
     ?~  tb
       %-  (slog ~[leaf+"insufficient balance or not enough confirmed balance"])
-      `state
+      [[(give-update %error %insufficient-balance)]~ state]
     =^  tb=(unit txbu)  state
       ?~  chng  `state
       =/  [addr=address =idx w=walt]
@@ -348,10 +348,12 @@
   ::  overwrites any payment being built in poym
   ::
       %init-payment
-    ~|  "Can't pay ourselves; no comets; can't do while tx is being signed"
-    ?<  =(src.bowl payee.comm)
-    ?<  ?=(%pawn (clan:title payee.comm))
-    ?<  is-broadcasting
+    ?:  =(src.bowl payee.comm)
+      [[(give-update %error %cant-pay-ourselves)]~ state]
+    ?:  ?=(%pawn (clan:title payee.comm))
+      [[(give-update %error %no-comets)]~ state]
+    ?:  is-broadcasting
+      [[(give-update %error %tx-being-signed)]~ state]
     :_  state(poym ~, feybs (~(put by feybs) payee.comm feyb.comm))
      ~[(poke-peer payee.comm [%gen-pay-address value.comm])]
   ::
@@ -432,7 +434,7 @@
     =^  tb=(unit txbu)  state
       (generate-txbu u.curr-xpub `src.bowl feyb ~[[address.act value.act ~]])
     :_  state(poym tb)
-    ?~  tb  ~
+    ?~  tb  [(give-update %error %insufficient-balance)]~
     %+  turn  txis.u.tb
     |=(=txi (poke-provider [%raw-tx txid.utxo.txi]))
     ::
