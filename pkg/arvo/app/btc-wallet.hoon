@@ -321,8 +321,13 @@
     [give-initial]~
   ::
       %init-payment-external
-    ?:  is-broadcasting  ~|("Broadcasting a transaction" !!)
+    ?:  is-broadcasting
+      %-  (slog ~[leaf+"broadcasting a transaction"])
+      [[(give-update %error %tx-being-signed)]~ state]
     ?~  curr-xpub        ~|("btc-wallet: no curr-xpub set" !!)
+    ?:  (is-dust value.comm address.comm)
+      %-  (slog ~[leaf+"sending dust"])
+      [[(give-update %error %no-dust)]~ state]
     ::
     =/  uw  (~(get by walts) u.curr-xpub)
     ?:  ?|(?=(~ uw) ?!(scanned.u.uw))
@@ -349,10 +354,13 @@
   ::
       %init-payment
     ?:  =(src.bowl payee.comm)
+      %-  (slog ~[leaf+"can't pay ourselves"])
       [[(give-update %error %cant-pay-ourselves)]~ state]
     ?:  ?=(%pawn (clan:title payee.comm))
+      %-  (slog ~[leaf+"no comets"])
       [[(give-update %error %no-comets)]~ state]
     ?:  is-broadcasting
+      %-  (slog ~[leaf+"broadcasting a transaction"])
       [[(give-update %error %tx-being-signed)]~ state]
     :_  state(poym ~, feybs (~(put by feybs) payee.comm feyb.comm))
      ~[(poke-peer payee.comm [%gen-pay-address value.comm])]
@@ -429,6 +437,10 @@
     ?:  =(src.bowl our.bowl)  ~|("Can't pay ourselves" !!)
     ?:  is-broadcasting  ~|("Broadcasting a transaction" !!)
     ?~  curr-xpub  ~|("btc-wallet-hook: no curr-xpub set" !!)
+    ?:  (is-dust value.act address.act)
+      %-  (slog ~[leaf+"sending dust"])
+      [[(give-update %error %no-dust)]~ state]
+    ::
     =+  feyb=(~(gut by feybs) src.bowl ?~(fee.btc-state fee:defaults u.fee.btc-state))
     |^
     =^  tb=(unit txbu)  state
@@ -1082,6 +1094,12 @@
         a
     ==
   (give-update initial)
+::
+++  is-dust
+  |=  [=sats =address]
+  ^-  ?
+  %+  lth  sats
+  (mul 3 (input-weight:bc (get-bipt:adr:bc address)))
 ::
 ++  is-broadcasting
   ^-  ?
